@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aditya Prasad — Software Engineering & Full-Stack Systems</title>
+    <title>Aditya Prasad — Software Engineering & Cloud-Native Systems</title>
     
     <!-- Prevent Flash of Unstyled Theme (FOUC) — Default to Light Theme unless explicitly saved as dark -->
     <script>
@@ -233,23 +233,23 @@
     <header class="fixed top-0 left-0 right-0 z-50 theme-nav border-b transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
             
-            <!-- Left: Name, Graduation Year & Role -->
+            <!-- Left: Name & Updated Subtitle -->
             <div class="flex items-center space-x-4">
                 <a href="#scene-intro" class="group flex items-center space-x-2.5 focus:outline-none">
                     <span class="w-2 h-2 rounded-full bg-accent-tone transition-transform duration-300 group-hover:scale-125"></span>
                     <span class="font-display font-semibold tracking-tight text-primary-tone text-base">Aditya Prasad</span>
                 </a>
                 <span class="hidden sm:inline-block text-xs font-mono text-secondary-tone border-l theme-border pl-4">
-                    CS ’27 · Software Engineering
+                    CS ’27 · Final Year Student
                 </span>
             </div>
 
             <!-- Center: Primary Section Links -->
             <nav class="hidden lg:flex items-center space-x-7 text-xs font-medium text-secondary-tone" aria-label="Primary Navigation">
+                <a href="#scene-credentials" data-nav="credentials" class="nav-link hover:text-primary-tone transition-colors py-1">Education & Leadership</a>
                 <a href="#scene-scriptmarket" data-nav="work" class="nav-link hover:text-primary-tone transition-colors py-1">Work</a>
                 <a href="#scene-architecture" data-nav="architecture" class="nav-link hover:text-primary-tone transition-colors py-1">Architecture</a>
-                <a href="#scene-about" data-nav="about" class="nav-link hover:text-primary-tone transition-colors py-1">About</a>
-                <a href="#scene-credentials" data-nav="credentials" class="nav-link hover:text-primary-tone transition-colors py-1">Credentials</a>
+                <a href="#scene-achievements" data-nav="achievements" class="nav-link hover:text-primary-tone transition-colors py-1">Achievements</a>
                 <a href="#scene-contact" data-nav="contact" class="nav-link hover:text-primary-tone transition-colors py-1">Contact</a>
             </nav>
 
@@ -292,7 +292,7 @@
                         <div class="inline-flex items-center space-x-2.5 px-3.5 py-1.5 rounded-full bg-accent-soft">
                             <span class="w-1.5 h-1.5 rounded-full bg-accent-tone"></span>
                             <span class="font-mono text-[11px] font-medium tracking-wider text-accent-tone uppercase">
-                                COMPUTER SCIENCE · SOFTWARE ENGINEERING
+                                COMPUTER SCIENCE · DEVOPS & CLOUD-NATIVE SYSTEMS
                             </span>
                         </div>
 
@@ -327,11 +327,77 @@
         </section>
 
         <!-- ======================================================================
-             SCENE 02 — TRANSITION INTO WORK (CAMERA DOLLY & GEOMETRY UNLOCK)
+             SCENE 02 — EDUCATION & LEADERSHIP + SELECTED PROJECTS INTRO
              ====================================================================== -->
-        <section id="scene-transition" data-stage="02 / SELECTED WORK" class="py-24 lg:py-36">
-            <div class="max-w-7xl mx-auto px-5 sm:px-8">
-                <div class="max-w-xl">
+        <section id="scene-transition" data-stage="02 / CREDENTIALS & WORK" class="py-20 lg:py-28 border-t theme-border">
+            <div class="max-w-7xl mx-auto px-5 sm:px-8 space-y-20">
+                
+                <!-- Education & Leadership (Moved to Top Before Projects) -->
+                <div id="scene-credentials" class="space-y-8">
+                    <div class="max-w-xl">
+                        <div class="font-mono text-xs text-accent-tone uppercase tracking-widest mb-2">
+                            ACADEMIC & LEADERSHIP // 01
+                        </div>
+                        <h2 class="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-primary-tone">
+                            Education & Leadership
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Education (6 Columns) -->
+                        <div class="lg:col-span-6 theme-panel rounded-3xl p-7 sm:p-9 flex flex-col justify-between space-y-6">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-mono text-xs text-accent-tone uppercase">Education</span>
+                                    <span class="font-mono text-xs text-secondary-tone">2023 – 2027</span>
+                                </div>
+                                <h3 class="font-display text-2xl font-semibold text-primary-tone">
+                                    SRM Institute of Science and Technology
+                                </h3>
+                                <p class="text-sm sm:text-base text-secondary-tone">
+                                    B.Tech in Computer Science and Engineering
+                                </p>
+                                <p class="text-xs text-secondary-tone leading-relaxed pt-1">
+                                    <span class="font-mono text-primary-tone">Relevant Coursework:</span> Data Structures & Algorithms, Object-Oriented Programming, Operating Systems, DBMS, Computer Networks
+                                </p>
+                            </div>
+                            <div class="pt-4 border-t theme-border flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-primary-tone">
+                                <span>CGPA: 8.99 / 10</span>
+                                <span class="text-secondary-tone">Chennai, Tamil Nadu, India</span>
+                            </div>
+                        </div>
+
+                        <!-- Leadership (6 Columns) -->
+                        <div class="lg:col-span-6 theme-panel rounded-3xl p-7 sm:p-9 flex flex-col justify-between space-y-6">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-mono text-xs text-accent-tone uppercase">Leadership Experience</span>
+                                    <span class="font-mono text-xs text-secondary-tone">07/2025 – 08/2026</span>
+                                </div>
+                                <h3 class="font-display text-2xl font-semibold text-primary-tone">
+                                    Creatives Head, IEEE SSIT, SRMIST
+                                </h3>
+                                <ul class="space-y-2.5 text-sm text-secondary-tone leading-relaxed pt-1">
+                                    <li class="flex items-start space-x-2.5">
+                                        <span class="font-mono text-xs text-accent-tone mt-0.5">01</span>
+                                        <span>Led a cross-functional 20-member team in planning and delivering HACKCELR8, a nationwide 24-hour hackathon.</span>
+                                    </li>
+                                    <li class="flex items-start space-x-2.5">
+                                        <span class="font-mono text-xs text-accent-tone mt-0.5">02</span>
+                                        <span>Coordinated project schedules and cross-team workflows, resolving operational bottlenecks to support smooth event execution.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="pt-4 border-t theme-border flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-secondary-tone">
+                                <span>IEEE Society on Social Implications of Technology</span>
+                                <span>Chennai, Tamil Nadu</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selected Projects Intro Header -->
+                <div class="max-w-xl pt-6">
                     <div class="font-mono text-xs text-accent-tone uppercase tracking-widest mb-3">
                         SELECTED PROJECTS // 01 — 03
                     </div>
@@ -339,6 +405,7 @@
                         Three systems across creative publishing, real-time 3D simulation, and cloud-native infrastructure.
                     </h2>
                 </div>
+
             </div>
         </section>
 
@@ -375,19 +442,19 @@
                         <ul class="space-y-3 pt-1 border-t theme-border text-sm text-primary-tone">
                             <li class="flex items-start space-x-3 pt-3">
                                 <span class="font-mono text-xs text-accent-tone mt-0.5">01</span>
-                                <span class="leading-relaxed">Built a full-stack screenplay marketplace using Next.js App Router.</span>
+                                <span class="leading-relaxed">Developed a full-stack marketplace for browsing, searching, and managing digital scripts using Next.js and React.</span>
                             </li>
                             <li class="flex items-start space-x-3">
                                 <span class="font-mono text-xs text-accent-tone mt-0.5">02</span>
-                                <span class="leading-relaxed">Implemented authentication, backend services, and transaction-related workflows.</span>
+                                <span class="leading-relaxed">Implemented application APIs and relational data models using Prisma and PostgreSQL to support marketplace workflows.</span>
                             </li>
                             <li class="flex items-start space-x-3">
                                 <span class="font-mono text-xs text-accent-tone mt-0.5">03</span>
-                                <span class="leading-relaxed">Used Prisma ORM with PostgreSQL hosted on Neon.</span>
+                                <span class="leading-relaxed">Used Prisma ORM with PostgreSQL hosted on Neon for reliable relational persistence.</span>
                             </li>
                             <li class="flex items-start space-x-3">
                                 <span class="font-mono text-xs text-accent-tone mt-0.5">04</span>
-                                <span class="leading-relaxed">Deployed through AWS Amplify with GitHub-connected deployment workflows.</span>
+                                <span class="leading-relaxed">Deployed the application on AWS Amplify and configured the build and deployment workflow.</span>
                             </li>
                         </ul>
 
@@ -427,36 +494,32 @@
 
         <!-- ======================================================================
              SCENE 04 — PROJECT 02: APEX VELOCITY 3D: DRIFT EDITION
-             Immersive Wide-Format Editorial Layout with 3D Circuit & Vehicle Stage
+             Single Unified Case Study Card (Zero gap between header and details)
              ====================================================================== -->
-        <section id="scene-apex" data-stage="04 / APEX VELOCITY 3D" class="min-h-[115vh] flex flex-col justify-between py-24 lg:py-32">
+        <section id="scene-apex" data-stage="04 / APEX VELOCITY 3D" class="min-h-screen flex items-center py-24 lg:py-32">
             <div class="max-w-7xl w-full mx-auto px-5 sm:px-8">
-                
-                <!-- Top Wide-Format Editorial Header -->
-                <div class="max-w-2xl theme-panel rounded-3xl p-7 sm:p-9 space-y-4">
-                    <div class="flex items-center justify-between gap-4">
-                        <span class="font-mono text-xs font-medium text-accent-tone">
-                            02 // INTERACTIVE 3D · BROWSER GAME
-                        </span>
-                        <span class="font-mono text-xs text-secondary-tone">THREE.JS & WEB AUDIO</span>
-                    </div>
-                    <h3 class="font-display text-3xl sm:text-5xl font-semibold text-primary-tone tracking-tight">
-                        APEX VELOCITY 3D: Drift Edition
-                    </h3>
-                    <p class="font-sans text-base sm:text-lg text-secondary-tone leading-relaxed">
-                        An immersive browser-based 3D racing game featuring custom vehicle dynamics, drift mechanics, procedural audio, and a real-time racing HUD.
-                    </p>
-                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                    
+                    <!-- Left 7 Columns: Unified Project Card (Whole Project Together) -->
+                    <article class="lg:col-span-7 theme-panel rounded-3xl p-7 sm:p-10 lg:p-12 space-y-7">
+                        <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b theme-border">
+                            <span class="font-mono text-xs font-medium text-accent-tone">
+                                02 // INTERACTIVE 3D · BROWSER GAME
+                            </span>
+                            <span class="font-mono text-xs text-secondary-tone">THREE.JS & WEB AUDIO</span>
+                        </div>
 
-                <!-- Center Open Viewport Window for the 3D Banked Race Circuit & Drift Prototype -->
-                <div class="h-72 sm:h-96 lg:h-[420px] flex items-end justify-end pointer-events-none" aria-hidden="true"></div>
+                        <div class="space-y-3">
+                            <h3 class="font-display text-3xl sm:text-4xl font-semibold text-primary-tone tracking-tight">
+                                APEX VELOCITY 3D: Drift Edition
+                            </h3>
+                            <p class="font-sans text-base sm:text-lg text-secondary-tone leading-relaxed">
+                                An immersive browser-based 3D racing game featuring custom vehicle dynamics, drift mechanics, procedural audio, and a real-time racing HUD.
+                            </p>
+                        </div>
 
-                <!-- Bottom Wide-Format Technical Architecture Bar -->
-                <article class="theme-panel rounded-3xl p-7 sm:p-10">
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                        
-                        <!-- Technical Features Breakdown (8 Columns) -->
-                        <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 text-sm text-primary-tone">
+                        <!-- Unified 6-Point Technical Breakdown -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 pt-4 border-t theme-border text-sm text-primary-tone">
                             <div class="space-y-1">
                                 <div class="font-mono text-xs text-accent-tone">01 / CORE ENGINE</div>
                                 <p class="text-secondary-tone leading-relaxed">Built with HTML5, vanilla JavaScript, and Three.js.</p>
@@ -483,10 +546,10 @@
                             </div>
                         </div>
 
-                        <!-- Technologies & Verified Live Demo CTA (4 Columns) -->
-                        <div class="lg:col-span-4 flex flex-col justify-between space-y-6 lg:border-l theme-border lg:pl-8">
+                        <!-- Stack & Live Demo Action inside the same unified container -->
+                        <div class="pt-4 border-t theme-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div>
-                                <div class="font-mono text-[11px] uppercase tracking-wider text-secondary-tone mb-2.5">Stack</div>
+                                <div class="font-mono text-[11px] uppercase tracking-wider text-secondary-tone mb-2">Stack</div>
                                 <div class="flex flex-wrap gap-2">
                                     <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">HTML5</span>
                                     <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">JavaScript</span>
@@ -495,8 +558,8 @@
                                 </div>
                             </div>
 
-                            <div class="pt-2">
-                                <a href="https://3dracinggame-hfun7ld7l-aditya290404s-projects.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn-editorial btn-primary w-full inline-flex items-center justify-center space-x-2.5 text-xs font-mono uppercase tracking-wider px-6 py-4 rounded-xl">
+                            <div class="pt-2 sm:pt-0">
+                                <a href="https://3dracinggame.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn-editorial btn-primary inline-flex items-center justify-center space-x-2.5 text-xs font-mono uppercase tracking-wider px-6 py-4 rounded-xl">
                                     <span>Play Live Demo</span>
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
@@ -504,10 +567,12 @@
                                 </a>
                             </div>
                         </div>
+                    </article>
 
-                    </div>
-                </article>
+                    <!-- Right 5 Columns: Open Viewport Stage for 3D Banked Race Circuit & Prototype -->
+                    <div class="lg:col-span-5 h-64 sm:h-80 lg:h-[520px]" aria-hidden="true"></div>
 
+                </div>
             </div>
         </section>
 
@@ -541,19 +606,19 @@
                         <ul class="space-y-3 pt-1 border-t theme-border text-sm text-primary-tone">
                             <li class="flex items-start space-x-3 pt-3">
                                 <span class="font-mono text-xs text-accent-tone mt-0.5">01</span>
-                                <span class="leading-relaxed">Built a full-stack platform with transactional data management.</span>
+                                <span class="leading-relaxed">Developed a paper trading platform for managing user accounts, wallet state, and virtual trading workflows.</span>
                             </li>
                             <li class="flex items-start space-x-3">
                                 <span class="font-mono text-xs text-accent-tone mt-0.5">02</span>
-                                <span class="leading-relaxed">Implemented real-time market-data workflows and trade execution using Socket.io and Redis.</span>
+                                <span class="leading-relaxed">Integrated Socket.io and Redis to support real-time communication and synchronized application state.</span>
                             </li>
                             <li class="flex items-start space-x-3">
                                 <span class="font-mono text-xs text-accent-tone mt-0.5">03</span>
-                                <span class="leading-relaxed">Used PostgreSQL and Prisma for persistent storage.</span>
+                                <span class="leading-relaxed">Used PostgreSQL and Prisma for persistent transactional storage.</span>
                             </li>
                             <li class="flex items-start space-x-3">
                                 <span class="font-mono text-xs text-accent-tone mt-0.5">04</span>
-                                <span class="leading-relaxed">Worked with Docker, Kubernetes, and Jenkins for containerization and CI/CD.</span>
+                                <span class="leading-relaxed">Containerized services using Docker on Linux and worked with Kubernetes and Jenkins for deployment automation.</span>
                             </li>
                         </ul>
 
@@ -561,8 +626,8 @@
                         <div class="pt-2">
                             <div class="font-mono text-[11px] uppercase tracking-wider text-secondary-tone mb-2.5">Technologies</div>
                             <div class="flex flex-wrap gap-2">
-                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Next.js</span>
                                 <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Node.js</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">JavaScript</span>
                                 <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">PostgreSQL</span>
                                 <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Prisma</span>
                                 <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Redis</span>
@@ -590,13 +655,12 @@
         </section>
 
         <!-- ======================================================================
-             SCENE 06 — ABOUT, ARCHITECTURE, SKILLS, EDUCATION & LEADERSHIP
-             Visually quieter editorial composition with connected 3D stack
+             SCENE 06 — ABOUT, ARCHITECTURE, TECHNICAL CAPABILITIES & ACHIEVEMENTS
              ====================================================================== -->
         <section id="scene-architecture" data-stage="06 / ARCHITECTURE" class="py-24 lg:py-32 border-t theme-border">
             <div class="max-w-7xl mx-auto px-5 sm:px-8 space-y-24">
                 
-                <!-- Part A: About & Architecture Overview -->
+                <!-- Part A: Software Architecture Meets Thoughtful Design (4 Tiers, No AI/ML) -->
                 <div id="scene-about" class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
                     
                     <!-- Left 5 Columns: About Narrative -->
@@ -612,7 +676,7 @@
                         </p>
                     </div>
 
-                    <!-- Right 7 Columns: Concise Technical Architecture Layers (Interacts with 3D Stack) -->
+                    <!-- Right 7 Columns: 4-Layer Architecture Stack (AI/ML row removed) -->
                     <div class="lg:col-span-7 theme-panel rounded-3xl p-6 sm:p-8 divide-y theme-border">
                         <div onmouseenter="highlightArchLayer(0)" onmouseleave="highlightArchLayer(-1)" class="arch-row py-4 flex items-center justify-between gap-4 rounded-lg px-2 cursor-default">
                             <div class="flex items-center space-x-4">
@@ -627,7 +691,7 @@
                                 <span class="font-mono text-xs text-accent-tone">02</span>
                                 <span class="font-display font-medium text-base sm:text-lg text-primary-tone">Backend services and REST APIs</span>
                             </div>
-                            <span class="font-mono text-xs text-secondary-tone hidden sm:inline">Node.js · Express.js · Socket.io</span>
+                            <span class="font-mono text-xs text-secondary-tone hidden sm:inline">Node.js · REST APIs</span>
                         </div>
 
                         <div onmouseenter="highlightArchLayer(2)" onmouseleave="highlightArchLayer(-1)" class="arch-row py-4 flex items-center justify-between gap-4 rounded-lg px-2 cursor-default">
@@ -635,7 +699,7 @@
                                 <span class="font-mono text-xs text-accent-tone">03</span>
                                 <span class="font-display font-medium text-base sm:text-lg text-primary-tone">Databases and data workflows</span>
                             </div>
-                            <span class="font-mono text-xs text-secondary-tone hidden sm:inline">PostgreSQL · Prisma · Redis</span>
+                            <span class="font-mono text-xs text-secondary-tone hidden sm:inline">PostgreSQL · MySQL · MongoDB · Prisma</span>
                         </div>
 
                         <div onmouseenter="highlightArchLayer(3)" onmouseleave="highlightArchLayer(-1)" class="arch-row py-4 flex items-center justify-between gap-4 rounded-lg px-2 cursor-default">
@@ -643,121 +707,90 @@
                                 <span class="font-mono text-xs text-accent-tone">04</span>
                                 <span class="font-display font-medium text-base sm:text-lg text-primary-tone">Containers, orchestration, and CI/CD</span>
                             </div>
-                            <span class="font-mono text-xs text-secondary-tone hidden sm:inline">Docker · Kubernetes · Jenkins · AWS</span>
-                        </div>
-
-                        <div onmouseenter="highlightArchLayer(4)" onmouseleave="highlightArchLayer(-1)" class="arch-row py-4 flex items-center justify-between gap-4 rounded-lg px-2 cursor-default">
-                            <div class="flex items-center space-x-4">
-                                <span class="font-mono text-xs text-accent-tone">05</span>
-                                <span class="font-display font-medium text-base sm:text-lg text-primary-tone">AI and machine-learning applications</span>
-                            </div>
-                            <span class="font-mono text-xs text-secondary-tone hidden sm:inline">PyTorch · TensorFlow · LLMs · RAG</span>
+                            <span class="font-mono text-xs text-secondary-tone hidden sm:inline">Docker · Kubernetes · Jenkins · AWS · Linux</span>
                         </div>
                     </div>
 
                 </div>
 
-                <!-- Part B: Technical Skills Matrix -->
+                <!-- Part B: Technical Capabilities (Aligned with Resume & DevOps Focus) -->
                 <div class="space-y-8">
                     <div class="border-b theme-border pb-4 flex items-center justify-between">
                         <h3 class="font-display text-2xl font-semibold text-primary-tone">Technical Capabilities</h3>
-                        <span class="font-mono text-xs text-secondary-tone">CORE STACK & FUNDAMENTALS</span>
+                        <span class="font-mono text-xs text-secondary-tone">CORE STACK & CLOUD INFRASTRUCTURE</span>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                        <div class="theme-panel rounded-2xl p-5 space-y-2">
-                            <div class="font-mono text-xs text-accent-tone uppercase">Programming</div>
-                            <p class="text-sm text-primary-tone font-medium leading-relaxed">C++, Python, C, JavaScript, SQL</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <div class="theme-panel rounded-2xl p-6 space-y-2">
+                            <div class="font-mono text-xs text-accent-tone uppercase">Languages</div>
+                            <p class="text-sm sm:text-base text-primary-tone font-medium leading-relaxed">C++, JavaScript, Python, SQL</p>
                         </div>
 
-                        <div class="theme-panel rounded-2xl p-5 space-y-2">
-                            <div class="font-mono text-xs text-accent-tone uppercase">Backend</div>
-                            <p class="text-sm text-primary-tone font-medium leading-relaxed">Node.js, Express.js, REST APIs, Socket.io</p>
-                        </div>
-
-                        <div class="theme-panel rounded-2xl p-5 space-y-2">
-                            <div class="font-mono text-xs text-accent-tone uppercase">Databases</div>
-                            <p class="text-sm text-primary-tone font-medium leading-relaxed">PostgreSQL, MySQL, MongoDB, SQLite</p>
-                        </div>
-
-                        <div class="theme-panel rounded-2xl p-5 space-y-2">
-                            <div class="font-mono text-xs text-accent-tone uppercase">Infrastructure</div>
-                            <p class="text-sm text-primary-tone font-medium leading-relaxed">AWS, AWS Amplify, Docker, Kubernetes, Jenkins, Linux</p>
-                        </div>
-
-                        <div class="theme-panel rounded-2xl p-5 space-y-2">
-                            <div class="font-mono text-xs text-accent-tone uppercase">Data Systems</div>
-                            <p class="text-sm text-primary-tone font-medium leading-relaxed">Redis, real-time data processing, data pipelines</p>
-                        </div>
-
-                        <div class="theme-panel rounded-2xl p-5 space-y-2">
-                            <div class="font-mono text-xs text-accent-tone uppercase">AI / ML</div>
-                            <p class="text-sm text-primary-tone font-medium leading-relaxed">Machine Learning, TensorFlow, PyTorch, LLMs, RAG</p>
-                        </div>
-
-                        <div class="theme-panel rounded-2xl p-5 space-y-2">
-                            <div class="font-mono text-xs text-accent-tone uppercase">Tools</div>
-                            <p class="text-sm text-primary-tone font-medium leading-relaxed">Git, GitHub, Postman, Prisma</p>
-                        </div>
-
-                        <div class="theme-panel rounded-2xl p-5 space-y-2">
+                        <div class="theme-panel rounded-2xl p-6 space-y-2">
                             <div class="font-mono text-xs text-accent-tone uppercase">Core CS</div>
-                            <p class="text-sm text-primary-tone font-medium leading-relaxed">DSA, OOP, Operating Systems, DBMS, Computer Networks</p>
+                            <p class="text-sm sm:text-base text-primary-tone font-medium leading-relaxed">DSA, OOP, DBMS, Operating Systems, Computer Networks</p>
+                        </div>
+
+                        <div class="theme-panel rounded-2xl p-6 space-y-2">
+                            <div class="font-mono text-xs text-accent-tone uppercase">Backend & APIs</div>
+                            <p class="text-sm sm:text-base text-primary-tone font-medium leading-relaxed">Node.js, REST APIs, Prisma ORM</p>
+                        </div>
+
+                        <div class="theme-panel rounded-2xl p-6 space-y-2">
+                            <div class="font-mono text-xs text-accent-tone uppercase">Databases</div>
+                            <p class="text-sm sm:text-base text-primary-tone font-medium leading-relaxed">PostgreSQL, MySQL, MongoDB, SQLite</p>
+                        </div>
+
+                        <div class="theme-panel rounded-2xl p-6 space-y-2">
+                            <div class="font-mono text-xs text-accent-tone uppercase">Cloud & Infrastructure</div>
+                            <p class="text-sm sm:text-base text-primary-tone font-medium leading-relaxed">Docker, Kubernetes, AWS, AWS Amplify, Jenkins, Linux</p>
+                        </div>
+
+                        <div class="theme-panel rounded-2xl p-6 space-y-2">
+                            <div class="font-mono text-xs text-accent-tone uppercase">Tools</div>
+                            <p class="text-sm sm:text-base text-primary-tone font-medium leading-relaxed">Git, GitHub, Postman, Prisma</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Part C: Education, Leadership & Achievements -->
-                <div id="scene-credentials" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    
-                    <!-- Education (5 Columns) -->
-                    <div class="lg:col-span-5 theme-panel rounded-3xl p-7 sm:p-8 flex flex-col justify-between space-y-6">
-                        <div class="space-y-2">
-                            <div class="font-mono text-xs text-accent-tone uppercase">Education</div>
-                            <h4 class="font-display text-xl sm:text-2xl font-semibold text-primary-tone">
-                                SRM Institute of Science and Technology
-                            </h4>
-                            <p class="text-sm text-secondary-tone">
-                                B.Tech in Computer Science and Engineering
-                            </p>
-                        </div>
-                        <div class="pt-4 border-t theme-border flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-primary-tone">
-                            <span>2023–2027 · CGPA 8.99/10</span>
-                            <span class="text-secondary-tone">Chennai, Tamil Nadu, India</span>
-                        </div>
+                <!-- Part C: Achievements (Placed at the end before Contact) -->
+                <div id="scene-achievements" class="space-y-8 pt-4">
+                    <div class="border-b theme-border pb-4 flex items-center justify-between">
+                        <h3 class="font-display text-2xl font-semibold text-primary-tone">Achievements</h3>
+                        <span class="font-mono text-xs text-secondary-tone">COMPETITIONS & RECOGNITION</span>
                     </div>
 
-                    <!-- Leadership (4 Columns) -->
-                    <div class="lg:col-span-4 theme-panel rounded-3xl p-7 sm:p-8 flex flex-col justify-between space-y-5">
-                        <div class="space-y-2">
-                            <div class="flex items-center justify-between">
-                                <span class="font-mono text-xs text-accent-tone uppercase">Leadership</span>
-                                <span class="font-mono text-[11px] text-secondary-tone">Jul 2025 – Aug 2026</span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="theme-panel rounded-3xl p-7 sm:p-8 flex items-start space-x-5">
+                            <div class="w-11 h-11 rounded-2xl bg-accent-soft flex items-center justify-center shrink-0 font-mono text-sm font-semibold text-accent-tone">
+                                01
                             </div>
-                            <h4 class="font-display text-xl font-semibold text-primary-tone">
-                                Creatives Head, IEEE SSIT, SRMIST
-                            </h4>
-                            <p class="text-sm text-secondary-tone leading-relaxed">
-                                Led a 20-member team in planning and executing HACKCELR8, a nationwide 24-hour hackathon, coordinating resources, timelines, and cross-functional activities.
-                            </p>
+                            <div class="space-y-1.5">
+                                <div class="font-mono text-xs text-accent-tone uppercase">Hackathon & Innovation</div>
+                                <h4 class="font-display text-xl font-semibold text-primary-tone">
+                                    2nd Place — Cognixion Innovation Challenge
+                                </h4>
+                                <p class="text-sm text-secondary-tone leading-relaxed">
+                                    Awarded second place for technical execution and product innovation.
+                                </p>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Achievements (3 Columns) -->
-                    <div class="lg:col-span-3 theme-panel rounded-3xl p-7 sm:p-8 flex flex-col justify-between space-y-4">
-                        <div class="font-mono text-xs text-accent-tone uppercase">Achievements</div>
-                        <div class="space-y-4 my-auto">
-                            <div class="border-l-2 border-[#4568F5] pl-3.5">
-                                <div class="font-display font-semibold text-sm text-primary-tone">Second Place</div>
-                                <div class="text-xs text-secondary-tone mt-0.5">Cognixion Innovation Challenge</div>
+                        <div class="theme-panel rounded-3xl p-7 sm:p-8 flex items-start space-x-5">
+                            <div class="w-11 h-11 rounded-2xl bg-accent-soft flex items-center justify-center shrink-0 font-mono text-sm font-semibold text-accent-tone">
+                                02
                             </div>
-                            <div class="border-l-2 border-[#4568F5] pl-3.5">
-                                <div class="font-display font-semibold text-sm text-primary-tone">Best Idea Award</div>
-                                <div class="text-xs text-secondary-tone mt-0.5">Green Hack 2.0</div>
+                            <div class="space-y-1.5">
+                                <div class="font-mono text-xs text-accent-tone uppercase">Sustainability & Tech</div>
+                                <h4 class="font-display text-xl font-semibold text-primary-tone">
+                                    Best Idea Award — Green Hack 2.0
+                                </h4>
+                                <p class="text-sm text-secondary-tone leading-relaxed">
+                                    Recognized for conceptualizing and prototyping the standout solution at Green Hack 2.0.
+                                </p>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
             </div>
@@ -805,7 +838,7 @@
 
             <!-- Minimal Footer -->
             <footer class="max-w-7xl w-full mx-auto px-5 sm:px-8 pt-12 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-secondary-tone">
-                <div>Aditya Prasad · Computer Science & Engineering</div>
+                <div>Aditya Prasad · CS ’27 Final Year Student</div>
                 <div class="flex items-center space-x-6">
                     <a href="https://github.com/aditya290404" target="_blank" rel="noopener noreferrer" class="hover:text-primary-tone transition-colors">GitHub</a>
                     <a href="mailto:workaditya2904@gmail.com" class="hover:text-primary-tone transition-colors">Email</a>
@@ -883,7 +916,7 @@
         let apexCurve;
         let tradeNetworkGroup;    // Scene 05: Trade-wide distributed node graph & packet rings
         let tradePackets = [];
-        let archStackGroup;       // Scene 06: 5-tier architecture stack
+        let archStackGroup;       // Scene 06: 4-tier architecture stack
         let archSlabs = [];
         let hoveredArchTier = -1;
 
@@ -901,7 +934,6 @@
         };
 
         const tempVec3 = new THREE.Vector3();
-        const tempLookAt = new THREE.Vector3(0, 0, 0);
         const currentCamLookAt = new THREE.Vector3(0, 0, 0);
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -1062,7 +1094,7 @@
            -------------------------------------------------------------------------- */
         function buildScene03ScriptMarketFolio() {
             scriptFolioGroup = new THREE.Group();
-            scriptFolioGroup.position.set(-2.3, -12, 0); // Positioned for Scene 03
+            scriptFolioGroup.position.set(-2.3, -12, 0);
 
             // Create 5 Layered Screenplay Folio Pages with procedural typographic lines
             const pageGeo = new THREE.BoxGeometry(2.15, 2.85, 0.035);
@@ -1098,7 +1130,7 @@
                         (2 - i) * 0.18,
                         -i * 0.38
                     ),
-                    baseRot: new THREE. Euler(
+                    baseRot: new THREE.Euler(
                         -0.08 + i * 0.03,
                         0.38 - i * 0.07,
                         -0.06 + i * 0.03
@@ -1124,33 +1156,33 @@
            -------------------------------------------------------------------------- */
         function buildScene04ApexVelocityCircuit() {
             apexCircuitGroup = new THREE.Group();
-            apexCircuitGroup.position.set(0, -24, 0);
+            apexCircuitGroup.position.set(2.3, -24, 0);
 
             // Closed 3D Banked Race Circuit Spline
             const pts = [
-                new THREE.Vector3(0, 0.0, 2.7),
-                new THREE.Vector3(3.6, 0.55, 1.4),
-                new THREE.Vector3(3.1, -0.35, -2.2),
-                new THREE.Vector3(0, 0.45, -3.1),
-                new THREE.Vector3(-3.3, -0.25, -1.9),
-                new THREE.Vector3(-3.5, 0.5, 1.5)
+                new THREE.Vector3(0, 0.0, 2.2),
+                new THREE.Vector3(2.8, 0.45, 1.1),
+                new THREE.Vector3(2.5, -0.3, -1.8),
+                new THREE.Vector3(0, 0.35, -2.5),
+                new THREE.Vector3(-2.6, -0.2, -1.5),
+                new THREE.Vector3(-2.8, 0.4, 1.2)
             ];
             apexCurve = new THREE.CatmullRomCurve3(pts, true, 'catmullrom', 0.5);
 
             // Extruded Track Surface Ribbon
-            const tubeGeo = new THREE.TubeGeometry(apexCurve, 140, 0.28, 8, true);
-            tubeGeo.scale(1, 0.16, 1); // Flatten into a banked road surface
+            const tubeGeo = new THREE.TubeGeometry(apexCurve, 140, 0.25, 8, true);
+            tubeGeo.scale(1, 0.16, 1);
             const trackMesh = new THREE.Mesh(tubeGeo, sharedMaterials.trackDark);
             apexCircuitGroup.add(trackMesh);
 
             // Cobalt Apex Racing Line & Curbs
-            const lineGeo = new THREE.TubeGeometry(apexCurve, 140, 0.025, 6, true);
+            const lineGeo = new THREE.TubeGeometry(apexCurve, 140, 0.022, 6, true);
             const racingLine = new THREE.Mesh(lineGeo, sharedMaterials.cobalt);
             racingLine.position.y = 0.05;
             apexCircuitGroup.add(racingLine);
 
             // Architectural Track Pylons / Gates
-            const gateGeo = new THREE.TorusGeometry(0.55, 0.02, 12, 32, Math.PI);
+            const gateGeo = new THREE.TorusGeometry(0.48, 0.02, 12, 32, Math.PI);
             [0.12, 0.45, 0.78].forEach((t) => {
                 const pt = apexCurve.getPointAt(t);
                 const tangent = apexCurve.getTangentAt(t);
@@ -1164,29 +1196,29 @@
             apexVehicleMesh = new THREE.Group();
 
             // Main Chassis Body
-            const chassisGeo = new THREE.BoxGeometry(0.42, 0.12, 0.88);
+            const chassisGeo = new THREE.BoxGeometry(0.38, 0.11, 0.8);
             const chassis = new THREE.Mesh(chassisGeo, sharedMaterials.pearl);
-            chassis.position.y = 0.09;
+            chassis.position.y = 0.08;
             apexVehicleMesh.add(chassis);
 
             // Aerodynamic Canopy
-            const canopyGeo = new THREE.BoxGeometry(0.28, 0.09, 0.42);
+            const canopyGeo = new THREE.BoxGeometry(0.25, 0.08, 0.38);
             const canopy = new THREE.Mesh(canopyGeo, sharedMaterials.cobalt);
-            canopy.position.set(0, 0.17, -0.04);
+            canopy.position.set(0, 0.15, -0.04);
             apexVehicleMesh.add(canopy);
 
             // Rear Diffuser & Wing
-            const wingGeo = new THREE.BoxGeometry(0.48, 0.025, 0.12);
+            const wingGeo = new THREE.BoxGeometry(0.44, 0.022, 0.11);
             const wing = new THREE.Mesh(wingGeo, sharedMaterials.silver);
-            wing.position.set(0, 0.21, -0.4);
+            wing.position.set(0, 0.19, -0.36);
             apexVehicleMesh.add(wing);
 
-            // 4 Wheels with subtle cobalt rim glow
-            const wheelGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.06, 16);
+            // 4 Wheels
+            const wheelGeo = new THREE.CylinderGeometry(0.07, 0.07, 0.05, 16);
             wheelGeo.rotateZ(Math.PI / 2);
             const wheelOffsets = [
-                [0.23, 0.08, 0.26], [-0.23, 0.08, 0.26],
-                [0.23, 0.08, -0.26], [-0.23, 0.08, -0.26]
+                [0.21, 0.07, 0.24], [-0.21, 0.07, 0.24],
+                [0.21, 0.07, -0.24], [-0.21, 0.07, -0.24]
             ];
             wheelOffsets.forEach((wo) => {
                 const wheel = new THREE.Mesh(wheelGeo, sharedMaterials.silver);
@@ -1205,14 +1237,13 @@
             tradeNetworkGroup = new THREE.Group();
             tradeNetworkGroup.position.set(2.2, -36, 0);
 
-            // Structured 3D Distributed Node Coordinates (Redis, PostgreSQL, Socket.io, K8s)
             const nodeCoords = [
                 new THREE.Vector3(0, 0, 0),          // Core Matching / Execution Hub
                 new THREE.Vector3(-1.4, 1.1, 0.4),   // Socket.io Gateway
                 new THREE.Vector3(1.4, 1.1, -0.3),   // Redis Pub/Sub Ring
                 new THREE.Vector3(-1.3, -1.1, -0.4), // PostgreSQL + Prisma Storage
-                new THREE.Vector3(1.3, -1.1, 0.5),   // Kubernetes Worker Pod A
-                new THREE.Vector3(0, 1.65, -0.6),    // Next.js Edge Client
+                new THREE.Vector3(1.3, -1.1, 0.5),   // Kubernetes Worker Pod
+                new THREE.Vector3(0, 1.65, -0.6),    // Node.js Service
                 new THREE.Vector3(0, -1.65, 0.6)     // Jenkins CI/CD Pipeline
             ];
 
@@ -1227,7 +1258,6 @@
                 mesh.position.copy(pos);
                 tradeNetworkGroup.add(mesh);
 
-                // Orbital Ring around Core Hub
                 if (idx === 0) {
                     const ring = new THREE.Mesh(
                         new THREE.TorusGeometry(0.68, 0.02, 16, 64),
@@ -1238,7 +1268,6 @@
                 }
             });
 
-            // Deterministic Edges & Animated Packet Spheres
             const edges = [
                 [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6],
                 [1, 5], [2, 5], [3, 6], [4, 2], [1, 3]
@@ -1266,17 +1295,17 @@
         }
 
         /* --------------------------------------------------------------------------
-           BUILD SCENE 06: ARCHITECTURE STACK (5 CONNECTED SYSTEM TIERS)
+           BUILD SCENE 06: ARCHITECTURE STACK (4 CONNECTED DEVOPS & FULL-STACK TIERS)
            -------------------------------------------------------------------------- */
         function buildScene06ArchitectureStack() {
             archStackGroup = new THREE.Group();
             archStackGroup.position.set(-2.2, -48, 0);
 
-            const slabGeo = new THREE.BoxGeometry(2.1, 0.11, 2.1);
+            const slabGeo = new THREE.BoxGeometry(2.1, 0.12, 2.1);
 
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 4; i++) {
                 const slabGroup = new THREE.Group();
-                const yPos = (2 - i) * 0.58; // Top (0) to Bottom (4)
+                const yPos = (1.5 - i) * 0.65; // 4 tiers: Frontend, Backend, Databases, Containers/CI-CD
                 slabGroup.position.y = yPos;
                 slabGroup.userData = { baseY: yPos, tierIndex: i };
 
@@ -1286,7 +1315,6 @@
                 );
                 slabGroup.add(slabMesh);
 
-                // Subtle Perimeter Frame
                 const border = new THREE.LineSegments(
                     new THREE.EdgesGeometry(slabGeo),
                     sharedMaterials.wireCobalt
@@ -1297,8 +1325,8 @@
                 archStackGroup.add(slabGroup);
             }
 
-            // Vertical Bus Pillar connecting all 5 layers
-            const pillarGeo = new THREE.CylinderGeometry(0.035, 0.035, 2.6, 12);
+            // Vertical Bus Pillar connecting all 4 layers
+            const pillarGeo = new THREE.CylinderGeometry(0.035, 0.035, 2.2, 12);
             const pillar = new THREE.Mesh(pillarGeo, sharedMaterials.silver);
             archStackGroup.add(pillar);
 
@@ -1318,7 +1346,7 @@
 
                 const sections = [
                     { id: '#scene-intro', stage: 1.0, label: '01 / INTRO' },
-                    { id: '#scene-transition', stage: 2.0, label: '02 / WORK UNLOCK' },
+                    { id: '#scene-transition', stage: 2.0, label: '02 / CREDENTIALS' },
                     { id: '#scene-scriptmarket', stage: 3.0, label: '03 / SCRIPTMARKET' },
                     { id: '#scene-apex', stage: 4.0, label: '04 / APEX VELOCITY 3D' },
                     { id: '#scene-tradewide', stage: 5.0, label: '05 / TRADE-WIDE' },
@@ -1368,17 +1396,7 @@
         /* --------------------------------------------------------------------------
            5. CONTINUOUS RENDER LOOP & CAMERA INTERPOLATION
            -------------------------------------------------------------------------- */
-        function getSectionCenterProgress(sectionId) {
-            const el = document.getElementById(sectionId);
-            if (!el) return 0;
-            const rect = el.getBoundingClientRect();
-            const viewportCenter = window.innerHeight * 0.5;
-            const elementCenter = rect.top + rect.height * 0.5;
-            return (viewportCenter - elementCenter) / window.innerHeight;
-        }
-
         function computeContinuousStage() {
-            // Map actual DOM scroll position cleanly into a continuous 1.0 -> 7.0 stage value
             const orderedIds = [
                 'scene-intro',
                 'scene-transition',
@@ -1444,7 +1462,6 @@
 
                 heroKineticGroup.visible = heroWeight > 0.01;
                 if (heroKineticGroup.visible) {
-                    // Stage 1: Right of hero text | Stage 2: Center foreground | Stage 7: Calm right-center
                     let targetX = isMobile ? 0 : 2.45;
                     let targetZ = 0;
                     let expandFactor = 1.0;
@@ -1472,7 +1489,6 @@
                         heroKineticGroup.rotation.x = 0.2 + Math.sin(t * 0.5) * 0.1 + mouseState.currentY * 0.25;
                     }
 
-                    // Expand satellites during Scene 02 transition
                     heroKineticGroup.children.forEach((child) => {
                         if (child.userData && child.userData.isSatellite) {
                             child.position.copy(child.userData.basePos).multiplyScalar(expandFactor);
@@ -1498,7 +1514,6 @@
                     scriptFolioGroup.rotation.y = 0.22 + mouseState.currentX * 0.28 + (s - 3.0) * 0.45;
                     scriptFolioGroup.rotation.x = mouseState.currentY * 0.18;
 
-                    // Fan out screenplay sheets smoothly
                     scriptFolioGroup.children.forEach((child) => {
                         if (child.userData && typeof child.userData.sheetIndex === 'number') {
                             const idx = child.userData.sheetIndex;
@@ -1515,21 +1530,20 @@
                 }
             }
 
-            // 3. Scene 04 — APEX VELOCITY 3D Race Circuit & Prototype Vehicle (Peak at Stage 4.0)
+            // 3. Scene 04 — APEX VELOCITY 3D Race Circuit & Prototype Vehicle (Peak at Stage 4.0, Right Side)
             if (apexCircuitGroup && apexCurve && apexVehicleMesh) {
                 const dist4 = Math.abs(s - 4.0);
                 const weight4 = Math.max(0, 1.0 - dist4 * 1.1);
                 apexCircuitGroup.visible = weight4 > 0.01;
 
                 if (apexCircuitGroup.visible) {
-                    apexCircuitGroup.position.set(0, (s - 4.0) * -2.0, -0.5);
+                    const targetX = isMobile ? 0 : 2.35;
+                    apexCircuitGroup.position.set(targetX, (s - 4.0) * -2.0, -0.2);
                     apexCircuitGroup.scale.setScalar(Math.max(0.001, weight4));
 
-                    // Dynamic tilt & rotation of the banked circuit as the visitor scrolls
                     apexCircuitGroup.rotation.x = 0.42 + mouseState.currentY * 0.15;
                     apexCircuitGroup.rotation.y = (s - 4.0) * 1.35 + mouseState.currentX * 0.3;
 
-                    // Drive the prototype vehicle around the spline circuit (scroll + continuous velocity)
                     const lapParam = ((t * (prefersReducedMotion ? 0.03 : 0.14)) + Math.max(0, s - 3.2) * 0.35) % 1;
                     const carPos = apexCurve.getPointAt(lapParam);
                     const lookParam = (lapParam + 0.025) % 1;
@@ -1538,7 +1552,6 @@
                     apexVehicleMesh.position.copy(carPos);
                     tempVec3.copy(carTarget).add(apexCircuitGroup.position);
                     apexVehicleMesh.lookAt(carTarget);
-                    // Subtle drift counter-steer angle on corners
                     apexVehicleMesh.rotation.y += 0.18 * Math.sin(lapParam * Math.PI * 4);
                 }
             }
@@ -1557,7 +1570,6 @@
                     tradeNetworkGroup.rotation.y = t * 0.18 + (s - 5.0) * 0.6 + mouseState.currentX * 0.3;
                     tradeNetworkGroup.rotation.x = 0.15 + mouseState.currentY * 0.2;
 
-                    // Animate data packets along distributed service paths
                     tradePackets.forEach((pkt) => {
                         const alpha = ((t * pkt.userData.speed) + pkt.userData.offset) % 1;
                         pkt.position.lerpVectors(pkt.userData.start, pkt.userData.end, alpha);
@@ -1589,7 +1601,7 @@
             }
 
             // Camera Dolly & Subtle Mouse Blend
-            const camTargetZ = s >= 3.5 && s <= 4.5 ? 8.2 : 9.4;
+            const camTargetZ = s >= 3.5 && s <= 4.5 ? 8.6 : 9.4;
             camera.position.z += (camTargetZ - camera.position.z) * 0.05;
             camera.position.x += (mouseState.currentX * 0.45 - camera.position.x) * 0.05;
             camera.position.y += (mouseState.currentY * 0.3 - camera.position.y) * 0.05;
