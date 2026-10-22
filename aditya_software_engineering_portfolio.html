@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aditya Prasad — Software Engineering & Full-Stack Systems</title>
+    
+    <!-- Prevent Flash of Unstyled Theme (FOUC) — Default to Light Theme unless explicitly saved as dark -->
+    <script>
+        (function() {
+            try {
+                var savedTheme = localStorage.getItem('aditya-portfolio-theme');
+                var theme = savedTheme === 'dark' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+
+    <!-- Google Fonts: Space Grotesk, Inter, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Three.js r128 & GSAP + ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['"Space Grotesk"', 'sans-serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ==========================================================================
+           LIGHT & DARK THEME TOKENS (Uninterrupted solid surfaces, zero grid lines)
+           ========================================================================== */
+        :root,
+        html[data-theme="light"] {
+            --bg-primary: #FAFAF7;
+            --bg-elevated: rgba(250, 250, 247, 0.84);
+            --bg-surface: rgba(241, 243, 245, 0.72);
+            --bg-card: rgba(255, 255, 255, 0.88);
+            --text-primary: #20242B;
+            --text-secondary: #68717D;
+            --accent-primary: #4568F5;
+            --accent-hover: #3454D1;
+            --accent-soft: #E8ECFF;
+            --border-subtle: #E3E6EA;
+            --shadow-editorial: 0 20px 50px -15px rgba(32, 36, 43, 0.06), 0 2px 8px -2px rgba(32, 36, 43, 0.03);
+        }
+
+        html[data-theme="dark"] {
+            --bg-primary: #0D1017;
+            --bg-elevated: rgba(13, 16, 23, 0.84);
+            --bg-surface: rgba(21, 26, 36, 0.76);
+            --bg-card: rgba(21, 26, 36, 0.88);
+            --text-primary: #F5F6F8;
+            --text-secondary: #949EAE;
+            --accent-primary: #5B7CFA;
+            --accent-hover: #7390FF;
+            --accent-soft: rgba(91, 124, 250, 0.15);
+            --border-subtle: #222938;
+            --shadow-editorial: 0 24px 60px -15px rgba(0, 0, 0, 0.45), 0 2px 10px -2px rgba(0, 0, 0, 0.3);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Persistent Full-Viewport 3D Canvas */
+        #webgl-stage {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        /* Editorial Content Layer */
+        #editorial-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Theme-aware utility classes */
+        .theme-nav {
+            background-color: var(--bg-elevated);
+            border-color: var(--border-subtle);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .theme-panel {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-editorial);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: background-color 0.35s ease, border-color 0.35s ease, transform 0.25s ease;
+        }
+
+        .theme-surface {
+            background-color: var(--bg-surface);
+            border-color: var(--border-subtle);
+            transition: background-color 0.35s ease, border-color 0.35s ease;
+        }
+
+        .theme-border {
+            border-color: var(--border-subtle);
+        }
+
+        .text-primary-tone {
+            color: var(--text-primary);
+        }
+
+        .text-secondary-tone {
+            color: var(--text-secondary);
+        }
+
+        .text-accent-tone {
+            color: var(--accent-primary);
+        }
+
+        .bg-accent-tone {
+            background-color: var(--accent-primary);
+        }
+
+        .bg-accent-soft {
+            background-color: var(--accent-soft);
+        }
+
+        /* Editorial Button Interactions */
+        .btn-editorial {
+            transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.22s ease, border-color 0.22s ease, color 0.22s ease, box-shadow 0.22s ease;
+        }
+        .btn-editorial:hover {
+            transform: translateY(-1.5px);
+        }
+        .btn-editorial:active {
+            transform: translateY(0.5px);
+        }
+
+        .btn-primary {
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-primary);
+            color: #FFFFFF;
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+        }
+        .btn-secondary:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        /* Architecture Row Hover Highlight */
+        .arch-row {
+            transition: padding-left 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, background-color 0.3s ease;
+        }
+        .arch-row:hover {
+            padding-left: 1.25rem;
+            background-color: var(--bg-surface);
+        }
+
+        /* Custom Minimal Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-subtle);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+    </style>
+</head>
+<body class="selection:bg-[#4568F5]/20 selection:text-[#4568F5]">
+
+    <!-- ==========================================================================
+         PERSISTENT FULL-VIEWPORT THREE.JS SCENE
+         ========================================================================== -->
+    <div id="webgl-stage" aria-hidden="true">
+        <!-- Non-WebGL Graceful Fallback (Hidden when WebGL initializes) -->
+        <div id="webgl-fallback" class="hidden w-full h-full flex items-center justify-end pr-16 opacity-20">
+            <div class="w-96 h-96 rounded-full border border-current flex items-center justify-center">
+                <div class="w-64 h-64 rounded-full border border-current rotate-45"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         FIXED EDITORIAL NAVIGATION WITH LIVE STAGE INDICATOR & THEME TOGGLE
+         ========================================================================== -->
+    <header class="fixed top-0 left-0 right-0 z-50 theme-nav border-b transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+            
+            <!-- Left: Name, Graduation Year & Role -->
+            <div class="flex items-center space-x-4">
+                <a href="#scene-intro" class="group flex items-center space-x-2.5 focus:outline-none">
+                    <span class="w-2 h-2 rounded-full bg-accent-tone transition-transform duration-300 group-hover:scale-125"></span>
+                    <span class="font-display font-semibold tracking-tight text-primary-tone text-base">Aditya Prasad</span>
+                </a>
+                <span class="hidden sm:inline-block text-xs font-mono text-secondary-tone border-l theme-border pl-4">
+                    CS ’27 · Software Engineering
+                </span>
+            </div>
+
+            <!-- Center: Primary Section Links -->
+            <nav class="hidden lg:flex items-center space-x-7 text-xs font-medium text-secondary-tone" aria-label="Primary Navigation">
+                <a href="#scene-scriptmarket" data-nav="work" class="nav-link hover:text-primary-tone transition-colors py-1">Work</a>
+                <a href="#scene-architecture" data-nav="architecture" class="nav-link hover:text-primary-tone transition-colors py-1">Architecture</a>
+                <a href="#scene-about" data-nav="about" class="nav-link hover:text-primary-tone transition-colors py-1">About</a>
+                <a href="#scene-credentials" data-nav="credentials" class="nav-link hover:text-primary-tone transition-colors py-1">Credentials</a>
+                <a href="#scene-contact" data-nav="contact" class="nav-link hover:text-primary-tone transition-colors py-1">Contact</a>
+            </nav>
+
+            <!-- Right: Active 3D Stage Pill & Functional Sun/Moon Theme Toggle -->
+            <div class="flex items-center space-x-3">
+                <div class="hidden md:flex items-center space-x-2 px-3 py-1.5 rounded-full theme-surface border text-[11px] font-mono text-secondary-tone">
+                    <span class="w-1.5 h-1.5 rounded-full bg-accent-tone"></span>
+                    <span id="stage-indicator">01 / INTRO</span>
+                </div>
+
+                <button id="theme-toggle-btn" type="button" onclick="toggleTheme()" aria-label="Toggle dark or light theme" title="Switch color theme" class="btn-editorial w-9 h-9 rounded-full theme-surface border flex items-center justify-center text-primary-tone hover:border-[#4568F5] focus:outline-none">
+                    <!-- Sun Icon (shown in Dark Mode) -->
+                    <svg id="icon-sun" class="w-4 h-4 hidden" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path stroke-linecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41"></path>
+                    </svg>
+                    <!-- Moon Icon (shown in Light Mode) -->
+                    <svg id="icon-moon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================================================
+         SCROLL-DRIVEN EDITORIAL CONTENT STREAM
+         ========================================================================== -->
+    <main id="editorial-content" class="pt-16">
+
+        <!-- ======================================================================
+             SCENE 01 — INTRODUCTION (HERO)
+             ====================================================================== -->
+        <section id="scene-intro" data-stage="01 / INTRO" class="min-h-[92vh] flex items-center py-20 lg:py-28">
+            <div class="max-w-7xl w-full mx-auto px-5 sm:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Left Column: Typographic Introduction -->
+                    <div class="lg:col-span-7 space-y-8">
+                        <div class="inline-flex items-center space-x-2.5 px-3.5 py-1.5 rounded-full bg-accent-soft">
+                            <span class="w-1.5 h-1.5 rounded-full bg-accent-tone"></span>
+                            <span class="font-mono text-[11px] font-medium tracking-wider text-accent-tone uppercase">
+                                COMPUTER SCIENCE · SOFTWARE ENGINEERING
+                            </span>
+                        </div>
+
+                        <h1 class="font-display text-5xl sm:text-6xl lg:text-[72px] font-semibold tracking-tight text-primary-tone leading-[1.03]">
+                            Building ideas<br />
+                            into real software.
+                        </h1>
+
+                        <p class="font-sans text-lg sm:text-xl text-secondary-tone font-normal leading-relaxed max-w-xl">
+                            I'm Aditya — a final-year computer science student who enjoys building full-stack products, backend systems, and cloud-native applications.
+                        </p>
+
+                        <div class="pt-2 flex flex-wrap items-center gap-4">
+                            <a href="#scene-scriptmarket" class="btn-editorial btn-primary inline-flex items-center space-x-3 font-sans font-medium text-sm px-6 py-3.5 rounded-xl">
+                                <span>Explore My Work</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                                </svg>
+                            </a>
+                            <a href="#scene-contact" class="btn-editorial btn-secondary inline-flex items-center space-x-2.5 font-sans font-medium text-sm px-6 py-3.5 rounded-xl">
+                                <span>Get in Touch</span>
+                                <span class="font-mono text-xs">→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Open Viewport Space for 3D Kinetic Sculpture -->
+                    <div class="lg:col-span-5 hidden lg:block h-[460px]" aria-hidden="true"></div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             SCENE 02 — TRANSITION INTO WORK (CAMERA DOLLY & GEOMETRY UNLOCK)
+             ====================================================================== -->
+        <section id="scene-transition" data-stage="02 / SELECTED WORK" class="py-24 lg:py-36">
+            <div class="max-w-7xl mx-auto px-5 sm:px-8">
+                <div class="max-w-xl">
+                    <div class="font-mono text-xs text-accent-tone uppercase tracking-widest mb-3">
+                        SELECTED PROJECTS // 01 — 03
+                    </div>
+                    <h2 class="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-primary-tone leading-snug">
+                        Three systems across creative publishing, real-time 3D simulation, and cloud-native infrastructure.
+                    </h2>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             SCENE 03 — PROJECT 01: SCRIPTMARKET
+             Expansive Asymmetric Editorial Layout (3D Visual Left, Case Study Right)
+             ====================================================================== -->
+        <section id="scene-scriptmarket" data-stage="03 / SCRIPTMARKET" class="min-h-screen flex items-center py-24 lg:py-32">
+            <div class="max-w-7xl w-full mx-auto px-5 sm:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                    
+                    <!-- Left 6 Columns: Open Viewport Stage for 3D Screenplay Folio Installation -->
+                    <div class="lg:col-span-6 h-64 sm:h-80 lg:h-[520px]" aria-hidden="true"></div>
+
+                    <!-- Right 6 Columns: ScriptMarket Editorial Case Study -->
+                    <article class="lg:col-span-6 theme-panel rounded-3xl p-7 sm:p-10 lg:p-12 space-y-7">
+                        <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b theme-border">
+                            <span class="font-mono text-xs font-medium text-accent-tone">
+                                01 // FULL-STACK PRODUCT · MARKETPLACE
+                            </span>
+                            <span class="font-mono text-xs text-secondary-tone">FEATURED WORK</span>
+                        </div>
+
+                        <div class="space-y-3">
+                            <h3 class="font-display text-3xl sm:text-4xl font-semibold text-primary-tone tracking-tight">
+                                ScriptMarket
+                            </h3>
+                            <p class="font-sans text-base sm:text-lg text-secondary-tone leading-relaxed">
+                                A marketplace for screenplay creators to publish, discover, buy, sell, and manage script assets.
+                            </p>
+                        </div>
+
+                        <!-- Highlights -->
+                        <ul class="space-y-3 pt-1 border-t theme-border text-sm text-primary-tone">
+                            <li class="flex items-start space-x-3 pt-3">
+                                <span class="font-mono text-xs text-accent-tone mt-0.5">01</span>
+                                <span class="leading-relaxed">Built a full-stack screenplay marketplace using Next.js App Router.</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <span class="font-mono text-xs text-accent-tone mt-0.5">02</span>
+                                <span class="leading-relaxed">Implemented authentication, backend services, and transaction-related workflows.</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <span class="font-mono text-xs text-accent-tone mt-0.5">03</span>
+                                <span class="leading-relaxed">Used Prisma ORM with PostgreSQL hosted on Neon.</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <span class="font-mono text-xs text-accent-tone mt-0.5">04</span>
+                                <span class="leading-relaxed">Deployed through AWS Amplify with GitHub-connected deployment workflows.</span>
+                            </li>
+                        </ul>
+
+                        <!-- Technologies -->
+                        <div class="pt-2">
+                            <div class="font-mono text-[11px] uppercase tracking-wider text-secondary-tone mb-2.5">Technologies</div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Next.js</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">React</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">TypeScript</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Tailwind CSS</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Prisma</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">PostgreSQL</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Neon</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">AWS Amplify</span>
+                            </div>
+                        </div>
+
+                        <!-- Working External Links -->
+                        <div class="pt-4 flex flex-wrap items-center gap-3.5">
+                            <a href="https://main.d15xbsk1qtkv82.amplifyapp.com" target="_blank" rel="noopener noreferrer" class="btn-editorial btn-primary inline-flex items-center space-x-2.5 text-xs font-mono uppercase tracking-wider px-5 py-3.5 rounded-xl">
+                                <span>Live Demo</span>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </a>
+                            <a href="https://github.com/aditya290404/ScriptMarket" target="_blank" rel="noopener noreferrer" class="btn-editorial btn-secondary inline-flex items-center space-x-2 text-xs font-mono uppercase tracking-wider px-5 py-3.5 rounded-xl">
+                                <span>Source Code</span>
+                                <span>↗</span>
+                            </a>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             SCENE 04 — PROJECT 02: APEX VELOCITY 3D: DRIFT EDITION
+             Immersive Wide-Format Editorial Layout with 3D Circuit & Vehicle Stage
+             ====================================================================== -->
+        <section id="scene-apex" data-stage="04 / APEX VELOCITY 3D" class="min-h-[115vh] flex flex-col justify-between py-24 lg:py-32">
+            <div class="max-w-7xl w-full mx-auto px-5 sm:px-8">
+                
+                <!-- Top Wide-Format Editorial Header -->
+                <div class="max-w-2xl theme-panel rounded-3xl p-7 sm:p-9 space-y-4">
+                    <div class="flex items-center justify-between gap-4">
+                        <span class="font-mono text-xs font-medium text-accent-tone">
+                            02 // INTERACTIVE 3D · BROWSER GAME
+                        </span>
+                        <span class="font-mono text-xs text-secondary-tone">THREE.JS & WEB AUDIO</span>
+                    </div>
+                    <h3 class="font-display text-3xl sm:text-5xl font-semibold text-primary-tone tracking-tight">
+                        APEX VELOCITY 3D: Drift Edition
+                    </h3>
+                    <p class="font-sans text-base sm:text-lg text-secondary-tone leading-relaxed">
+                        An immersive browser-based 3D racing game featuring custom vehicle dynamics, drift mechanics, procedural audio, and a real-time racing HUD.
+                    </p>
+                </div>
+
+                <!-- Center Open Viewport Window for the 3D Banked Race Circuit & Drift Prototype -->
+                <div class="h-72 sm:h-96 lg:h-[420px] flex items-end justify-end pointer-events-none" aria-hidden="true"></div>
+
+                <!-- Bottom Wide-Format Technical Architecture Bar -->
+                <article class="theme-panel rounded-3xl p-7 sm:p-10">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                        
+                        <!-- Technical Features Breakdown (8 Columns) -->
+                        <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 text-sm text-primary-tone">
+                            <div class="space-y-1">
+                                <div class="font-mono text-xs text-accent-tone">01 / CORE ENGINE</div>
+                                <p class="text-secondary-tone leading-relaxed">Built with HTML5, vanilla JavaScript, and Three.js.</p>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="font-mono text-xs text-accent-tone">02 / VEHICLE DYNAMICS</div>
+                                <p class="text-secondary-tone leading-relaxed">Uses custom vehicle dynamics with acceleration, braking, transmission behavior, tire-slip simulation, and counter-steering.</p>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="font-mono text-xs text-accent-tone">03 / DRIFT & PARTICLE FX</div>
+                                <p class="text-secondary-tone leading-relaxed">Features drifting, skid marks, smoke particles, sparks, and brake glow effects.</p>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="font-mono text-xs text-accent-tone">04 / TELEMETRY HUD</div>
+                                <p class="text-secondary-tone leading-relaxed">Includes a translucent telemetry HUD with tachometer, gear indicator, nitro gauge, minimap, and drift scoring.</p>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="font-mono text-xs text-accent-tone">05 / PROCEDURAL AUDIO</div>
+                                <p class="text-secondary-tone leading-relaxed">Generates engine audio, tire squeal, gear-shift effects, and boost sounds using the native Web Audio API.</p>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="font-mono text-xs text-accent-tone">06 / AI & CIRCUIT</div>
+                                <p class="text-secondary-tone leading-relaxed">Includes a circuit environment and autonomous AI opponent cars.</p>
+                            </div>
+                        </div>
+
+                        <!-- Technologies & Verified Live Demo CTA (4 Columns) -->
+                        <div class="lg:col-span-4 flex flex-col justify-between space-y-6 lg:border-l theme-border lg:pl-8">
+                            <div>
+                                <div class="font-mono text-[11px] uppercase tracking-wider text-secondary-tone mb-2.5">Stack</div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">HTML5</span>
+                                    <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">JavaScript</span>
+                                    <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Three.js</span>
+                                    <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Web Audio API</span>
+                                </div>
+                            </div>
+
+                            <div class="pt-2">
+                                <a href="https://3dracinggame-hfun7ld7l-aditya290404s-projects.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn-editorial btn-primary w-full inline-flex items-center justify-center space-x-2.5 text-xs font-mono uppercase tracking-wider px-6 py-4 rounded-xl">
+                                    <span>Play Live Demo</span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             SCENE 05 — PROJECT 03: TRADE-WIDE
+             Refined Technical Layout (Structured Breakdown Left, 3D Topology Right)
+             ====================================================================== -->
+        <section id="scene-tradewide" data-stage="05 / TRADE-WIDE" class="min-h-screen flex items-center py-24 lg:py-32">
+            <div class="max-w-7xl w-full mx-auto px-5 sm:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                    
+                    <!-- Left 6 Columns: Trade-wide Technical Case Study -->
+                    <article class="lg:col-span-6 theme-panel rounded-3xl p-7 sm:p-10 lg:p-12 space-y-7">
+                        <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b theme-border">
+                            <span class="font-mono text-xs font-medium text-accent-tone">
+                                03 // CLOUD-NATIVE APPLICATION · FINTECH
+                            </span>
+                            <span class="font-mono text-xs text-secondary-tone">DISTRIBUTED WORKFLOWS</span>
+                        </div>
+
+                        <div class="space-y-3">
+                            <h3 class="font-display text-3xl sm:text-4xl font-semibold text-primary-tone tracking-tight">
+                                Trade-wide
+                            </h3>
+                            <p class="font-sans text-base sm:text-lg text-secondary-tone leading-relaxed">
+                                A cloud-native paper-trading platform designed around simulated trading, user wallets, leaderboards, and real-time market alerts.
+                            </p>
+                        </div>
+
+                        <!-- Highlights -->
+                        <ul class="space-y-3 pt-1 border-t theme-border text-sm text-primary-tone">
+                            <li class="flex items-start space-x-3 pt-3">
+                                <span class="font-mono text-xs text-accent-tone mt-0.5">01</span>
+                                <span class="leading-relaxed">Built a full-stack platform with transactional data management.</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <span class="font-mono text-xs text-accent-tone mt-0.5">02</span>
+                                <span class="leading-relaxed">Implemented real-time market-data workflows and trade execution using Socket.io and Redis.</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <span class="font-mono text-xs text-accent-tone mt-0.5">03</span>
+                                <span class="leading-relaxed">Used PostgreSQL and Prisma for persistent storage.</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <span class="font-mono text-xs text-accent-tone mt-0.5">04</span>
+                                <span class="leading-relaxed">Worked with Docker, Kubernetes, and Jenkins for containerization and CI/CD.</span>
+                            </li>
+                        </ul>
+
+                        <!-- Technologies -->
+                        <div class="pt-2">
+                            <div class="font-mono text-[11px] uppercase tracking-wider text-secondary-tone mb-2.5">Technologies</div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Next.js</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Node.js</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">PostgreSQL</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Prisma</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Redis</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Socket.io</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Docker</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Kubernetes</span>
+                                <span class="font-mono text-xs px-3 py-1 rounded-full theme-surface border text-primary-tone">Jenkins</span>
+                            </div>
+                        </div>
+
+                        <!-- Verified Source Code Button -->
+                        <div class="pt-4">
+                            <a href="https://github.com/aditya290404/Trade-wide" target="_blank" rel="noopener noreferrer" class="btn-editorial btn-primary inline-flex items-center space-x-2.5 text-xs font-mono uppercase tracking-wider px-6 py-3.5 rounded-xl">
+                                <span>View Source Code</span>
+                                <span>↗</span>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- Right 6 Columns: Open Viewport Stage for 3D Distributed Node Network -->
+                    <div class="lg:col-span-6 h-64 sm:h-80 lg:h-[520px]" aria-hidden="true"></div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             SCENE 06 — ABOUT, ARCHITECTURE, SKILLS, EDUCATION & LEADERSHIP
+             Visually quieter editorial composition with connected 3D stack
+             ====================================================================== -->
+        <section id="scene-architecture" data-stage="06 / ARCHITECTURE" class="py-24 lg:py-32 border-t theme-border">
+            <div class="max-w-7xl mx-auto px-5 sm:px-8 space-y-24">
+                
+                <!-- Part A: About & Architecture Overview -->
+                <div id="scene-about" class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                    
+                    <!-- Left 5 Columns: About Narrative -->
+                    <div class="lg:col-span-5 space-y-5">
+                        <div class="font-mono text-xs text-accent-tone uppercase tracking-widest">
+                            ABOUT & ARCHITECTURE
+                        </div>
+                        <h2 class="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-primary-tone leading-tight">
+                            Software architecture meets thoughtful design.
+                        </h2>
+                        <p class="font-sans text-base sm:text-lg text-secondary-tone leading-relaxed">
+                            I'm a final-year Computer Science and Engineering student at SRM Institute of Science and Technology. I enjoy building full-stack applications, backend systems, and cloud-native infrastructure, with an interest in how software architecture and thoughtful design come together.
+                        </p>
+                    </div>
+
+                    <!-- Right 7 Columns: Concise Technical Architecture Layers (Interacts with 3D Stack) -->
+                    <div class="lg:col-span-7 theme-panel rounded-3xl p-6 sm:p-8 divide-y theme-border">
+                        <div onmouseenter="highlightArchLayer(0)" onmouseleave="highlightArchLayer(-1)" class="arch-row py-4 flex items-center justify-between gap-4 rounded-lg px-2 cursor-default">
+                            <div class="flex items-center space-x-4">
+                                <span class="font-mono text-xs text-accent-tone">01</span>
+                                <span class="font-display font-medium text-base sm:text-lg text-primary-tone">Frontend applications</span>
+                            </div>
+                            <span class="font-mono text-xs text-secondary-tone hidden sm:inline">React · Next.js · Three.js</span>
+                        </div>
+
+                        <div onmouseenter="highlightArchLayer(1)" onmouseleave="highlightArchLayer(-1)" class="arch-row py-4 flex items-center justify-between gap-4 rounded-lg px-2 cursor-default">
+                            <div class="flex items-center space-x-4">
+                                <span class="font-mono text-xs text-accent-tone">02</span>
+                                <span class="font-display font-medium text-base sm:text-lg text-primary-tone">Backend services and REST APIs</span>
+                            </div>
+                            <span class="font-mono text-xs text-secondary-tone hidden sm:inline">Node.js · Express.js · Socket.io</span>
+                        </div>
+
+                        <div onmouseenter="highlightArchLayer(2)" onmouseleave="highlightArchLayer(-1)" class="arch-row py-4 flex items-center justify-between gap-4 rounded-lg px-2 cursor-default">
+                            <div class="flex items-center space-x-4">
+                                <span class="font-mono text-xs text-accent-tone">03</span>
+                                <span class="font-display font-medium text-base sm:text-lg text-primary-tone">Databases and data workflows</span>
+                            </div>
+                            <span class="font-mono text-xs text-secondary-tone hidden sm:inline">PostgreSQL · Prisma · Redis</span>
+                        </div>
+
+                        <div onmouseenter="highlightArchLayer(3)" onmouseleave="highlightArchLayer(-1)" class="arch-row py-4 flex items-center justify-between gap-4 rounded-lg px-2 cursor-default">
+                            <div class="flex items-center space-x-4">
+                                <span class="font-mono text-xs text-accent-tone">04</span>
+                                <span class="font-display font-medium text-base sm:text-lg text-primary-tone">Containers, orchestration, and CI/CD</span>
+                            </div>
+                            <span class="font-mono text-xs text-secondary-tone hidden sm:inline">Docker · Kubernetes · Jenkins · AWS</span>
+                        </div>
+
+                        <div onmouseenter="highlightArchLayer(4)" onmouseleave="highlightArchLayer(-1)" class="arch-row py-4 flex items-center justify-between gap-4 rounded-lg px-2 cursor-default">
+                            <div class="flex items-center space-x-4">
+                                <span class="font-mono text-xs text-accent-tone">05</span>
+                                <span class="font-display font-medium text-base sm:text-lg text-primary-tone">AI and machine-learning applications</span>
+                            </div>
+                            <span class="font-mono text-xs text-secondary-tone hidden sm:inline">PyTorch · TensorFlow · LLMs · RAG</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Part B: Technical Skills Matrix -->
+                <div class="space-y-8">
+                    <div class="border-b theme-border pb-4 flex items-center justify-between">
+                        <h3 class="font-display text-2xl font-semibold text-primary-tone">Technical Capabilities</h3>
+                        <span class="font-mono text-xs text-secondary-tone">CORE STACK & FUNDAMENTALS</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                        <div class="theme-panel rounded-2xl p-5 space-y-2">
+                            <div class="font-mono text-xs text-accent-tone uppercase">Programming</div>
+                            <p class="text-sm text-primary-tone font-medium leading-relaxed">C++, Python, C, JavaScript, SQL</p>
+                        </div>
+
+                        <div class="theme-panel rounded-2xl p-5 space-y-2">
+                            <div class="font-mono text-xs text-accent-tone uppercase">Backend</div>
+                            <p class="text-sm text-primary-tone font-medium leading-relaxed">Node.js, Express.js, REST APIs, Socket.io</p>
+                        </div>
+
+                        <div class="theme-panel rounded-2xl p-5 space-y-2">
+                            <div class="font-mono text-xs text-accent-tone uppercase">Databases</div>
+                            <p class="text-sm text-primary-tone font-medium leading-relaxed">PostgreSQL, MySQL, MongoDB, SQLite</p>
+                        </div>
+
+                        <div class="theme-panel rounded-2xl p-5 space-y-2">
+                            <div class="font-mono text-xs text-accent-tone uppercase">Infrastructure</div>
+                            <p class="text-sm text-primary-tone font-medium leading-relaxed">AWS, AWS Amplify, Docker, Kubernetes, Jenkins, Linux</p>
+                        </div>
+
+                        <div class="theme-panel rounded-2xl p-5 space-y-2">
+                            <div class="font-mono text-xs text-accent-tone uppercase">Data Systems</div>
+                            <p class="text-sm text-primary-tone font-medium leading-relaxed">Redis, real-time data processing, data pipelines</p>
+                        </div>
+
+                        <div class="theme-panel rounded-2xl p-5 space-y-2">
+                            <div class="font-mono text-xs text-accent-tone uppercase">AI / ML</div>
+                            <p class="text-sm text-primary-tone font-medium leading-relaxed">Machine Learning, TensorFlow, PyTorch, LLMs, RAG</p>
+                        </div>
+
+                        <div class="theme-panel rounded-2xl p-5 space-y-2">
+                            <div class="font-mono text-xs text-accent-tone uppercase">Tools</div>
+                            <p class="text-sm text-primary-tone font-medium leading-relaxed">Git, GitHub, Postman, Prisma</p>
+                        </div>
+
+                        <div class="theme-panel rounded-2xl p-5 space-y-2">
+                            <div class="font-mono text-xs text-accent-tone uppercase">Core CS</div>
+                            <p class="text-sm text-primary-tone font-medium leading-relaxed">DSA, OOP, Operating Systems, DBMS, Computer Networks</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Part C: Education, Leadership & Achievements -->
+                <div id="scene-credentials" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    
+                    <!-- Education (5 Columns) -->
+                    <div class="lg:col-span-5 theme-panel rounded-3xl p-7 sm:p-8 flex flex-col justify-between space-y-6">
+                        <div class="space-y-2">
+                            <div class="font-mono text-xs text-accent-tone uppercase">Education</div>
+                            <h4 class="font-display text-xl sm:text-2xl font-semibold text-primary-tone">
+                                SRM Institute of Science and Technology
+                            </h4>
+                            <p class="text-sm text-secondary-tone">
+                                B.Tech in Computer Science and Engineering
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t theme-border flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-primary-tone">
+                            <span>2023–2027 · CGPA 8.99/10</span>
+                            <span class="text-secondary-tone">Chennai, Tamil Nadu, India</span>
+                        </div>
+                    </div>
+
+                    <!-- Leadership (4 Columns) -->
+                    <div class="lg:col-span-4 theme-panel rounded-3xl p-7 sm:p-8 flex flex-col justify-between space-y-5">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="font-mono text-xs text-accent-tone uppercase">Leadership</span>
+                                <span class="font-mono text-[11px] text-secondary-tone">Jul 2025 – Aug 2026</span>
+                            </div>
+                            <h4 class="font-display text-xl font-semibold text-primary-tone">
+                                Creatives Head, IEEE SSIT, SRMIST
+                            </h4>
+                            <p class="text-sm text-secondary-tone leading-relaxed">
+                                Led a 20-member team in planning and executing HACKCELR8, a nationwide 24-hour hackathon, coordinating resources, timelines, and cross-functional activities.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Achievements (3 Columns) -->
+                    <div class="lg:col-span-3 theme-panel rounded-3xl p-7 sm:p-8 flex flex-col justify-between space-y-4">
+                        <div class="font-mono text-xs text-accent-tone uppercase">Achievements</div>
+                        <div class="space-y-4 my-auto">
+                            <div class="border-l-2 border-[#4568F5] pl-3.5">
+                                <div class="font-display font-semibold text-sm text-primary-tone">Second Place</div>
+                                <div class="text-xs text-secondary-tone mt-0.5">Cognixion Innovation Challenge</div>
+                            </div>
+                            <div class="border-l-2 border-[#4568F5] pl-3.5">
+                                <div class="font-display font-semibold text-sm text-primary-tone">Best Idea Award</div>
+                                <div class="text-xs text-secondary-tone mt-0.5">Green Hack 2.0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             SCENE 07 — CONTACT
+             Calm, balanced final composition with working email & GitHub links
+             ====================================================================== -->
+        <section id="scene-contact" data-stage="07 / CONTACT" class="min-h-[78vh] flex flex-col justify-between py-24 lg:py-32 border-t theme-border">
+            <div class="max-w-7xl w-full mx-auto px-5 sm:px-8 my-auto">
+                <div class="theme-panel rounded-3xl p-8 sm:p-12 lg:p-16 max-w-4xl">
+                    <div class="space-y-6">
+                        <div class="font-mono text-xs text-accent-tone uppercase tracking-widest">
+                            07 // CONTACT
+                        </div>
+
+                        <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-primary-tone leading-[1.06]">
+                            Have something worth building?
+                        </h2>
+
+                        <p class="font-sans text-base sm:text-lg text-secondary-tone max-w-2xl leading-relaxed">
+                            I'm always interested in interesting engineering problems, ambitious product ideas, and opportunities to build useful software.
+                        </p>
+
+                        <!-- Working Contact Actions (No fake form) -->
+                        <div class="pt-4 flex flex-wrap items-center gap-4">
+                            <a href="mailto:workaditya2904@gmail.com" class="btn-editorial btn-primary inline-flex items-center space-x-3 text-sm font-medium px-6 py-4 rounded-xl">
+                                <span>workaditya2904@gmail.com</span>
+                                <span>→</span>
+                            </a>
+
+                            <button type="button" onclick="copyEmailToClipboard()" class="btn-editorial btn-secondary inline-flex items-center space-x-2 text-xs font-mono uppercase tracking-wider px-5 py-4 rounded-xl">
+                                <span id="copy-btn-label">Copy Email</span>
+                            </button>
+
+                            <a href="https://github.com/aditya290404" target="_blank" rel="noopener noreferrer" class="btn-editorial btn-secondary inline-flex items-center space-x-2 text-xs font-mono uppercase tracking-wider px-5 py-4 rounded-xl">
+                                <span>GitHub // @aditya290404</span>
+                                <span>↗</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Minimal Footer -->
+            <footer class="max-w-7xl w-full mx-auto px-5 sm:px-8 pt-12 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-secondary-tone">
+                <div>Aditya Prasad · Computer Science & Engineering</div>
+                <div class="flex items-center space-x-6">
+                    <a href="https://github.com/aditya290404" target="_blank" rel="noopener noreferrer" class="hover:text-primary-tone transition-colors">GitHub</a>
+                    <a href="mailto:workaditya2904@gmail.com" class="hover:text-primary-tone transition-colors">Email</a>
+                    <a href="#scene-intro" class="hover:text-primary-tone transition-colors">Back to top ↑</a>
+                </div>
+            </footer>
+        </section>
+
+    </main>
+
+    <!-- ==========================================================================
+         PERSISTENT SCROLL-DRIVEN THREE.JS ENGINE & CHOREOGRAPHY
+         ========================================================================== -->
+    <script>
+        /* --------------------------------------------------------------------------
+           1. THEME MANAGEMENT (LIGHT DEFAULT + PERSISTENT LOCALSTORAGE + 3D SYNC)
+           -------------------------------------------------------------------------- */
+        let currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        function updateThemeIcons(theme) {
+            const sunIcon = document.getElementById('icon-sun');
+            const moonIcon = document.getElementById('icon-moon');
+            if (!sunIcon || !moonIcon) return;
+            if (theme === 'dark') {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            try {
+                localStorage.setItem('aditya-portfolio-theme', currentTheme);
+            } catch (e) {}
+            updateThemeIcons(currentTheme);
+            applyThemeTo3DScene(currentTheme);
+        }
+
+        updateThemeIcons(currentTheme);
+
+        function copyEmailToClipboard() {
+            const email = 'workaditya2904@gmail.com';
+            const label = document.getElementById('copy-btn-label');
+            const textarea = document.createElement('textarea');
+            textarea.value = email;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                if (label) {
+                    label.textContent = 'Copied ✓';
+                    setTimeout(() => { label.textContent = 'Copy Email'; }, 2000);
+                }
+            } catch (err) {}
+            document.body.removeChild(textarea);
+        }
+
+        /* --------------------------------------------------------------------------
+           2. SINGLE PERSISTENT THREE.JS SCENE & 7-STAGE SCROLL STATE SYSTEM
+           -------------------------------------------------------------------------- */
+        let scene, camera, renderer;
+        let ambientLight, keyLight, rimLight, fillLight;
+        let sharedMaterials = {};
+
+        // Scene Groups for the evolving 3D worlds
+        let rootStage;
+        let heroKineticGroup;     // Scene 01, 02 & 07: Interlocking metallic rings + cobalt core
+        let scriptFolioGroup;     // Scene 03: ScriptMarket layered screenplay sheets & cinema aperture
+        let apexCircuitGroup;     // Scene 04: APEX VELOCITY 3D banked spline race circuit & prototype car
+        let apexVehicleMesh;
+        let apexCurve;
+        let tradeNetworkGroup;    // Scene 05: Trade-wide distributed node graph & packet rings
+        let tradePackets = [];
+        let archStackGroup;       // Scene 06: 5-tier architecture stack
+        let archSlabs = [];
+        let hoveredArchTier = -1;
+
+        // Smooth Scroll & Mouse Interpolation State (Zero allocations inside loop)
+        const scrollState = {
+            progress: 0,       // Normalized 0..1 across entire page
+            sceneProgress: 1.0 // Continuous 1.0 -> 7.0 stage float controlled by GSAP ScrollTrigger
+        };
+
+        const mouseState = {
+            targetX: 0,
+            targetY: 0,
+            currentX: 0,
+            currentY: 0
+        };
+
+        const tempVec3 = new THREE.Vector3();
+        const tempLookAt = new THREE.Vector3(0, 0, 0);
+        const currentCamLookAt = new THREE.Vector3(0, 0, 0);
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        function initPersistent3DPortfolio() {
+            const stageContainer = document.getElementById('webgl-stage');
+            const fallbackEl = document.getElementById('webgl-fallback');
+            if (!stageContainer) return;
+
+            try {
+                scene = new THREE.Scene();
+                const bgHex = currentTheme === 'dark' ? 0x0D1017 : 0xFAFAF7;
+                scene.fog = new THREE.FogExp2(bgHex, 0.035);
+
+                const isMobile = window.innerWidth < 768;
+                camera = new THREE.PerspectiveCamera(isMobile ? 48 : 38, window.innerWidth / window.innerHeight, 0.1, 120);
+                camera.position.set(0, 0.3, 9.5);
+
+                renderer = new THREE.WebGLRenderer({
+                    antialias: true,
+                    alpha: true,
+                    powerPreference: 'high-performance'
+                });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                stageContainer.appendChild(renderer.domElement);
+            } catch (err) {
+                if (fallbackEl) fallbackEl.classList.remove('hidden');
+                return;
+            }
+
+            // Studio Lighting
+            ambientLight = new THREE.AmbientLight(0xffffff, currentTheme === 'dark' ? 0.55 : 0.9);
+            scene.add(ambientLight);
+
+            keyLight = new THREE.DirectionalLight(0xfffdf9, currentTheme === 'dark' ? 1.15 : 1.3);
+            keyLight.position.set(6, 10, 8);
+            scene.add(keyLight);
+
+            rimLight = new THREE.PointLight(0x4568F5, 1.6, 25);
+            rimLight.position.set(-6, 3, 4);
+            scene.add(rimLight);
+
+            fillLight = new THREE.PointLight(0x8B95A5, 0.8, 20);
+            fillLight.position.set(5, -5, 3);
+            scene.add(fillLight);
+
+            // Shared Reusable Materials
+            sharedMaterials.pearl = new THREE.MeshStandardMaterial({
+                color: currentTheme === 'dark' ? 0x1E2534 : 0xFCFBF9,
+                roughness: 0.22,
+                metalness: 0.12
+            });
+
+            sharedMaterials.silver = new THREE.MeshStandardMaterial({
+                color: currentTheme === 'dark' ? 0x8E9BAE : 0xD2D7DF,
+                roughness: 0.25,
+                metalness: 0.84
+            });
+
+            sharedMaterials.cobalt = new THREE.MeshPhysicalMaterial({
+                color: 0x4568F5,
+                transparent: true,
+                opacity: 0.78,
+                roughness: 0.15,
+                metalness: 0.15,
+                clearcoat: 0.9
+            });
+
+            sharedMaterials.paper = new THREE.MeshStandardMaterial({
+                color: currentTheme === 'dark' ? 0x202838 : 0xFAF8F2,
+                roughness: 0.35,
+                metalness: 0.05,
+                side: THREE.DoubleSide
+            });
+
+            sharedMaterials.trackDark = new THREE.MeshStandardMaterial({
+                color: currentTheme === 'dark' ? 0x182030 : 0x28303D,
+                roughness: 0.4,
+                metalness: 0.45
+            });
+
+            sharedMaterials.wireCobalt = new THREE.LineBasicMaterial({
+                color: 0x4568F5,
+                transparent: true,
+                opacity: 0.5
+            });
+
+            rootStage = new THREE.Group();
+            scene.add(rootStage);
+
+            // Build the modular 3D worlds inside the single persistent scene
+            buildScene01KineticSculpture();
+            buildScene03ScriptMarketFolio();
+            buildScene04ApexVelocityCircuit();
+            buildScene05TradeWideTopology();
+            buildScene06ArchitectureStack();
+
+            // Setup GSAP ScrollTrigger Timeline
+            initScrollChoreography();
+
+            // Mouse & Resize Listeners
+            window.addEventListener('mousemove', onPointerMove, { passive: true });
+            window.addEventListener('resize', onViewportResize, { passive: true });
+        }
+
+        /* --------------------------------------------------------------------------
+           BUILD SCENE 01 / 02 / 07: KINETIC ARCHITECTURAL SCULPTURE
+           -------------------------------------------------------------------------- */
+        function buildScene01KineticSculpture() {
+            heroKineticGroup = new THREE.Group();
+            const isMobile = window.innerWidth < 1024;
+            heroKineticGroup.position.set(isMobile ? 0 : 2.5, 0.1, 0);
+
+            // Central Cobalt Octahedral Core
+            const coreGeo = new THREE.OctahedronGeometry(0.95, 0);
+            const coreMesh = new THREE.Mesh(coreGeo, sharedMaterials.cobalt);
+            coreMesh.name = 'kineticCore';
+            heroKineticGroup.add(coreMesh);
+
+            // Inner Pearl Architectural Frame
+            const frameGeo = new THREE.IcosahedronGeometry(1.22, 0);
+            const frameWire = new THREE.LineSegments(
+                new THREE.EdgesGeometry(frameGeo),
+                sharedMaterials.wireCobalt
+            );
+            frameWire.name = 'kineticWire';
+            heroKineticGroup.add(frameWire);
+
+            // 3 Interlocking Brushed Metallic Gimbal Rings
+            const ringRadii = [1.55, 1.92, 2.28];
+            ringRadii.forEach((radius, idx) => {
+                const ringGeo = new THREE.TorusGeometry(radius, 0.042, 20, 96);
+                const ringMesh = new THREE.Mesh(ringGeo, sharedMaterials.silver);
+                ringMesh.rotation.set(idx * 0.65, idx * 0.45, idx * 0.25);
+                ringMesh.userData = { baseRadius: radius, index: idx };
+                heroKineticGroup.add(ringMesh);
+            });
+
+            // 6 Floating Architectural Satellites that separate on Scene 02 transition
+            const nodeGeo = new THREE.BoxGeometry(0.28, 0.28, 0.28);
+            const dirs = [
+                [1.8, 0.9, 0.4], [-1.8, -0.9, -0.4],
+                [0.8, -1.6, 0.7], [-0.8, 1.6, -0.7],
+                [0, 1.2, 1.6], [0, -1.2, -1.6]
+            ];
+            dirs.forEach((d) => {
+                const satellite = new THREE.Mesh(nodeGeo, sharedMaterials.pearl);
+                satellite.position.set(d[0], d[1], d[2]);
+                satellite.userData = { basePos: new THREE.Vector3(d[0], d[1], d[2]), isSatellite: true };
+                heroKineticGroup.add(satellite);
+            });
+
+            rootStage.add(heroKineticGroup);
+        }
+
+        /* --------------------------------------------------------------------------
+           BUILD SCENE 03: SCRIPTMARKET (SCREENPLAY PAGES & FILM FRAME APERTURES)
+           -------------------------------------------------------------------------- */
+        function buildScene03ScriptMarketFolio() {
+            scriptFolioGroup = new THREE.Group();
+            scriptFolioGroup.position.set(-2.3, -12, 0); // Positioned for Scene 03
+
+            // Create 5 Layered Screenplay Folio Pages with procedural typographic lines
+            const pageGeo = new THREE.BoxGeometry(2.15, 2.85, 0.035);
+            const lineGeo = new THREE.BoxGeometry(1.45, 0.028, 0.01);
+
+            for (let i = 0; i < 5; i++) {
+                const pageHolder = new THREE.Group();
+                const pageMesh = new THREE.Mesh(pageGeo, sharedMaterials.paper);
+                pageHolder.add(pageMesh);
+
+                // Add procedural screenplay sluglines and dialogue indentations on front page
+                for (let row = 0; row < 7; row++) {
+                    const isDialogue = row % 2 === 1;
+                    const bar = new THREE.Mesh(
+                        lineGeo,
+                        row === 0 ? sharedMaterials.cobalt : sharedMaterials.silver
+                    );
+                    bar.scale.x = isDialogue ? 0.62 : 0.95;
+                    bar.position.set(isDialogue ? 0 : -0.18, 0.95 - row * 0.3, 0.025);
+                    pageHolder.add(bar);
+                }
+
+                // Subtle Cobalt Binding Spine on Left Edge
+                const spineGeo = new THREE.CylinderGeometry(0.03, 0.03, 2.85, 12);
+                const spineMesh = new THREE.Mesh(spineGeo, sharedMaterials.cobalt);
+                spineMesh.position.set(-1.08, 0, 0);
+                pageHolder.add(spineMesh);
+
+                pageHolder.userData = {
+                    sheetIndex: i,
+                    baseOffset: new THREE.Vector3(
+                        (i - 2) * 0.35,
+                        (2 - i) * 0.18,
+                        -i * 0.38
+                    ),
+                    baseRot: new THREE. Euler(
+                        -0.08 + i * 0.03,
+                        0.38 - i * 0.07,
+                        -0.06 + i * 0.03
+                    )
+                };
+                scriptFolioGroup.add(pageHolder);
+            }
+
+            // Outer Cinema Aspect Ratio Frame (2.39:1 Anamorphic Aperture)
+            const frameCurve = new THREE.BoxGeometry(3.8, 2.1, 0.03);
+            const frameEdges = new THREE.LineSegments(
+                new THREE.EdgesGeometry(frameCurve),
+                sharedMaterials.wireCobalt
+            );
+            frameEdges.position.set(0.1, 0, 0.65);
+            scriptFolioGroup.add(frameEdges);
+
+            rootStage.add(scriptFolioGroup);
+        }
+
+        /* --------------------------------------------------------------------------
+           BUILD SCENE 04: APEX VELOCITY 3D (PROCEDURAL RACE CIRCUIT & PROTOTYPE CAR)
+           -------------------------------------------------------------------------- */
+        function buildScene04ApexVelocityCircuit() {
+            apexCircuitGroup = new THREE.Group();
+            apexCircuitGroup.position.set(0, -24, 0);
+
+            // Closed 3D Banked Race Circuit Spline
+            const pts = [
+                new THREE.Vector3(0, 0.0, 2.7),
+                new THREE.Vector3(3.6, 0.55, 1.4),
+                new THREE.Vector3(3.1, -0.35, -2.2),
+                new THREE.Vector3(0, 0.45, -3.1),
+                new THREE.Vector3(-3.3, -0.25, -1.9),
+                new THREE.Vector3(-3.5, 0.5, 1.5)
+            ];
+            apexCurve = new THREE.CatmullRomCurve3(pts, true, 'catmullrom', 0.5);
+
+            // Extruded Track Surface Ribbon
+            const tubeGeo = new THREE.TubeGeometry(apexCurve, 140, 0.28, 8, true);
+            tubeGeo.scale(1, 0.16, 1); // Flatten into a banked road surface
+            const trackMesh = new THREE.Mesh(tubeGeo, sharedMaterials.trackDark);
+            apexCircuitGroup.add(trackMesh);
+
+            // Cobalt Apex Racing Line & Curbs
+            const lineGeo = new THREE.TubeGeometry(apexCurve, 140, 0.025, 6, true);
+            const racingLine = new THREE.Mesh(lineGeo, sharedMaterials.cobalt);
+            racingLine.position.y = 0.05;
+            apexCircuitGroup.add(racingLine);
+
+            // Architectural Track Pylons / Gates
+            const gateGeo = new THREE.TorusGeometry(0.55, 0.02, 12, 32, Math.PI);
+            [0.12, 0.45, 0.78].forEach((t) => {
+                const pt = apexCurve.getPointAt(t);
+                const tangent = apexCurve.getTangentAt(t);
+                const gate = new THREE.Mesh(gateGeo, sharedMaterials.silver);
+                gate.position.copy(pt);
+                gate.lookAt(pt.clone().add(tangent));
+                apexCircuitGroup.add(gate);
+            });
+
+            // Stylized Low-Slung Aerodynamic Prototype Vehicle
+            apexVehicleMesh = new THREE.Group();
+
+            // Main Chassis Body
+            const chassisGeo = new THREE.BoxGeometry(0.42, 0.12, 0.88);
+            const chassis = new THREE.Mesh(chassisGeo, sharedMaterials.pearl);
+            chassis.position.y = 0.09;
+            apexVehicleMesh.add(chassis);
+
+            // Aerodynamic Canopy
+            const canopyGeo = new THREE.BoxGeometry(0.28, 0.09, 0.42);
+            const canopy = new THREE.Mesh(canopyGeo, sharedMaterials.cobalt);
+            canopy.position.set(0, 0.17, -0.04);
+            apexVehicleMesh.add(canopy);
+
+            // Rear Diffuser & Wing
+            const wingGeo = new THREE.BoxGeometry(0.48, 0.025, 0.12);
+            const wing = new THREE.Mesh(wingGeo, sharedMaterials.silver);
+            wing.position.set(0, 0.21, -0.4);
+            apexVehicleMesh.add(wing);
+
+            // 4 Wheels with subtle cobalt rim glow
+            const wheelGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.06, 16);
+            wheelGeo.rotateZ(Math.PI / 2);
+            const wheelOffsets = [
+                [0.23, 0.08, 0.26], [-0.23, 0.08, 0.26],
+                [0.23, 0.08, -0.26], [-0.23, 0.08, -0.26]
+            ];
+            wheelOffsets.forEach((wo) => {
+                const wheel = new THREE.Mesh(wheelGeo, sharedMaterials.silver);
+                wheel.position.set(wo[0], wo[1], wo[2]);
+                apexVehicleMesh.add(wheel);
+            });
+
+            apexCircuitGroup.add(apexVehicleMesh);
+            rootStage.add(apexCircuitGroup);
+        }
+
+        /* --------------------------------------------------------------------------
+           BUILD SCENE 05: TRADE-WIDE (DISTRIBUTED CLOUD TOPOLOGY & DATA FLOW)
+           -------------------------------------------------------------------------- */
+        function buildScene05TradeWideTopology() {
+            tradeNetworkGroup = new THREE.Group();
+            tradeNetworkGroup.position.set(2.2, -36, 0);
+
+            // Structured 3D Distributed Node Coordinates (Redis, PostgreSQL, Socket.io, K8s)
+            const nodeCoords = [
+                new THREE.Vector3(0, 0, 0),          // Core Matching / Execution Hub
+                new THREE.Vector3(-1.4, 1.1, 0.4),   // Socket.io Gateway
+                new THREE.Vector3(1.4, 1.1, -0.3),   // Redis Pub/Sub Ring
+                new THREE.Vector3(-1.3, -1.1, -0.4), // PostgreSQL + Prisma Storage
+                new THREE.Vector3(1.3, -1.1, 0.5),   // Kubernetes Worker Pod A
+                new THREE.Vector3(0, 1.65, -0.6),    // Next.js Edge Client
+                new THREE.Vector3(0, -1.65, 0.6)     // Jenkins CI/CD Pipeline
+            ];
+
+            const hubGeo = new THREE.OctahedronGeometry(0.38, 0);
+            const subNodeGeo = new THREE.BoxGeometry(0.32, 0.32, 0.32);
+
+            nodeCoords.forEach((pos, idx) => {
+                const mesh = new THREE.Mesh(
+                    idx === 0 ? hubGeo : subNodeGeo,
+                    idx === 0 ? sharedMaterials.cobalt : sharedMaterials.pearl
+                );
+                mesh.position.copy(pos);
+                tradeNetworkGroup.add(mesh);
+
+                // Orbital Ring around Core Hub
+                if (idx === 0) {
+                    const ring = new THREE.Mesh(
+                        new THREE.TorusGeometry(0.68, 0.02, 16, 64),
+                        sharedMaterials.silver
+                    );
+                    ring.rotation.x = Math.PI / 3;
+                    tradeNetworkGroup.add(ring);
+                }
+            });
+
+            // Deterministic Edges & Animated Packet Spheres
+            const edges = [
+                [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6],
+                [1, 5], [2, 5], [3, 6], [4, 2], [1, 3]
+            ];
+
+            const linePoints = [];
+            const packetGeo = new THREE.SphereGeometry(0.055, 12, 12);
+
+            edges.forEach((pair, idx) => {
+                const start = nodeCoords[pair[0]];
+                const end = nodeCoords[pair[1]];
+                linePoints.push(start, end);
+
+                const packet = new THREE.Mesh(packetGeo, sharedMaterials.cobalt);
+                packet.userData = { start: start, end: end, speed: 0.45 + (idx % 4) * 0.15, offset: idx * 0.17 };
+                tradePackets.push(packet);
+                tradeNetworkGroup.add(packet);
+            });
+
+            const edgeGeo = new THREE.BufferGeometry().setFromPoints(linePoints);
+            const edgeLines = new THREE.LineSegments(edgeGeo, sharedMaterials.wireCobalt);
+            tradeNetworkGroup.add(edgeLines);
+
+            rootStage.add(tradeNetworkGroup);
+        }
+
+        /* --------------------------------------------------------------------------
+           BUILD SCENE 06: ARCHITECTURE STACK (5 CONNECTED SYSTEM TIERS)
+           -------------------------------------------------------------------------- */
+        function buildScene06ArchitectureStack() {
+            archStackGroup = new THREE.Group();
+            archStackGroup.position.set(-2.2, -48, 0);
+
+            const slabGeo = new THREE.BoxGeometry(2.1, 0.11, 2.1);
+
+            for (let i = 0; i < 5; i++) {
+                const slabGroup = new THREE.Group();
+                const yPos = (2 - i) * 0.58; // Top (0) to Bottom (4)
+                slabGroup.position.y = yPos;
+                slabGroup.userData = { baseY: yPos, tierIndex: i };
+
+                const slabMesh = new THREE.Mesh(
+                    slabGeo,
+                    i === 0 ? sharedMaterials.cobalt : sharedMaterials.pearl
+                );
+                slabGroup.add(slabMesh);
+
+                // Subtle Perimeter Frame
+                const border = new THREE.LineSegments(
+                    new THREE.EdgesGeometry(slabGeo),
+                    sharedMaterials.wireCobalt
+                );
+                slabGroup.add(border);
+
+                archSlabs.push(slabGroup);
+                archStackGroup.add(slabGroup);
+            }
+
+            // Vertical Bus Pillar connecting all 5 layers
+            const pillarGeo = new THREE.CylinderGeometry(0.035, 0.035, 2.6, 12);
+            const pillar = new THREE.Mesh(pillarGeo, sharedMaterials.silver);
+            archStackGroup.add(pillar);
+
+            rootStage.add(archStackGroup);
+        }
+
+        function highlightArchLayer(tierIndex) {
+            hoveredArchTier = tierIndex;
+        }
+
+        /* --------------------------------------------------------------------------
+           3. GSAP SCROLLTRIGGER & STAGE CHOREOGRAPHY
+           -------------------------------------------------------------------------- */
+        function initScrollChoreography() {
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+
+                const sections = [
+                    { id: '#scene-intro', stage: 1.0, label: '01 / INTRO' },
+                    { id: '#scene-transition', stage: 2.0, label: '02 / WORK UNLOCK' },
+                    { id: '#scene-scriptmarket', stage: 3.0, label: '03 / SCRIPTMARKET' },
+                    { id: '#scene-apex', stage: 4.0, label: '04 / APEX VELOCITY 3D' },
+                    { id: '#scene-tradewide', stage: 5.0, label: '05 / TRADE-WIDE' },
+                    { id: '#scene-architecture', stage: 6.0, label: '06 / ARCHITECTURE' },
+                    { id: '#scene-contact', stage: 7.0, label: '07 / CONTACT' }
+                ];
+
+                sections.forEach((sec) => {
+                    const el = document.querySelector(sec.id);
+                    if (!el) return;
+
+                    ScrollTrigger.create({
+                        trigger: el,
+                        start: 'top 65%',
+                        end: 'bottom 35%',
+                        onEnter: () => updateStageIndicator(sec.label),
+                        onEnterBack: () => updateStageIndicator(sec.label)
+                    });
+                });
+            }
+        }
+
+        function updateStageIndicator(text) {
+            const pill = document.getElementById('stage-indicator');
+            if (pill) pill.textContent = text;
+        }
+
+        /* --------------------------------------------------------------------------
+           4. THEME SYNCHRONIZATION WITH THREE.JS SCENE
+           -------------------------------------------------------------------------- */
+        function applyThemeTo3DScene(theme) {
+            if (!scene || !sharedMaterials.pearl) return;
+
+            const isDark = theme === 'dark';
+            const fogColor = isDark ? 0x0D1017 : 0xFAFAF7;
+            scene.fog.color.setHex(fogColor);
+
+            ambientLight.intensity = isDark ? 0.55 : 0.9;
+            keyLight.intensity = isDark ? 1.15 : 1.3;
+
+            sharedMaterials.pearl.color.setHex(isDark ? 0x1E2534 : 0xFCFBF9);
+            sharedMaterials.silver.color.setHex(isDark ? 0x8E9BAE : 0xD2D7DF);
+            sharedMaterials.paper.color.setHex(isDark ? 0x1B2230 : 0xFAF8F2);
+            sharedMaterials.trackDark.color.setHex(isDark ? 0x151C28 : 0x28303D);
+        }
+
+        /* --------------------------------------------------------------------------
+           5. CONTINUOUS RENDER LOOP & CAMERA INTERPOLATION
+           -------------------------------------------------------------------------- */
+        function getSectionCenterProgress(sectionId) {
+            const el = document.getElementById(sectionId);
+            if (!el) return 0;
+            const rect = el.getBoundingClientRect();
+            const viewportCenter = window.innerHeight * 0.5;
+            const elementCenter = rect.top + rect.height * 0.5;
+            return (viewportCenter - elementCenter) / window.innerHeight;
+        }
+
+        function computeContinuousStage() {
+            // Map actual DOM scroll position cleanly into a continuous 1.0 -> 7.0 stage value
+            const orderedIds = [
+                'scene-intro',
+                'scene-transition',
+                'scene-scriptmarket',
+                'scene-apex',
+                'scene-tradewide',
+                'scene-architecture',
+                'scene-contact'
+            ];
+
+            const vh = window.innerHeight;
+            const mid = vh * 0.5;
+
+            const centers = orderedIds.map((id) => {
+                const el = document.getElementById(id);
+                if (!el) return 0;
+                const r = el.getBoundingClientRect();
+                return r.top + r.height * 0.45;
+            });
+
+            if (mid <= centers[0]) return 1.0;
+            if (mid >= centers[centers.length - 1]) return 7.0;
+
+            for (let i = 0; i < centers.length - 1; i++) {
+                const c1 = centers[i];
+                const c2 = centers[i + 1];
+                if (mid >= c1 && mid <= c2) {
+                    const t = (mid - c1) / Math.max(1, c2 - c1);
+                    return (i + 1) + t;
+                }
+            }
+            return 1.0;
+        }
+
+        function animatePortfolio(now) {
+            requestAnimationFrame(animatePortfolio);
+
+            if (document.hidden || !renderer || !scene || !camera) return;
+
+            const t = now * 0.001;
+            const isMobile = window.innerWidth < 1024;
+
+            // Smoothly interpolate continuous scroll stage (reversible up & down)
+            const targetStage = computeContinuousStage();
+            scrollState.sceneProgress += (targetStage - scrollState.sceneProgress) * 0.085;
+            const s = scrollState.sceneProgress;
+
+            // Smooth mouse parallax damping
+            mouseState.currentX += (mouseState.targetX - mouseState.currentX) * 0.06;
+            mouseState.currentY += (mouseState.targetY - mouseState.currentY) * 0.06;
+
+            /* ----------------------------------------------------------------------
+               STAGE CHOREOGRAPHY: POSITIONING THE 5 WORLDS & CAMERA SMOOTHLY
+               ---------------------------------------------------------------------- */
+            // 1. Hero Kinetic Sculpture (Active in Stage 1, 2, and returns calmly in Stage 7)
+            if (heroKineticGroup) {
+                let heroWeight = 0;
+                if (s <= 2.8) {
+                    heroWeight = 1.0 - Math.max(0, (s - 2.0) / 0.8);
+                } else if (s >= 6.1) {
+                    heroWeight = Math.min(1.0, (s - 6.1) / 0.8);
+                }
+
+                heroKineticGroup.visible = heroWeight > 0.01;
+                if (heroKineticGroup.visible) {
+                    // Stage 1: Right of hero text | Stage 2: Center foreground | Stage 7: Calm right-center
+                    let targetX = isMobile ? 0 : 2.45;
+                    let targetZ = 0;
+                    let expandFactor = 1.0;
+
+                    if (s > 1.0 && s <= 2.8) {
+                        const p12 = Math.min(1, s - 1.0);
+                        targetX = (isMobile ? 0 : 2.45) * (1 - p12 * 0.65);
+                        targetZ = p12 * 1.85;
+                        expandFactor = 1.0 + p12 * 0.65;
+                    } else if (s >= 6.1) {
+                        targetX = isMobile ? 0 : 2.2;
+                        targetZ = -0.6;
+                        expandFactor = 0.92;
+                    }
+
+                    heroKineticGroup.position.x += (targetX - heroKineticGroup.position.x) * 0.08;
+                    heroKineticGroup.position.z += (targetZ - heroKineticGroup.position.z) * 0.08;
+                    heroKineticGroup.position.y = Math.sin(t * 1.1) * 0.08;
+
+                    const scaleVal = Math.max(0.001, heroWeight);
+                    heroKineticGroup.scale.setScalar(scaleVal);
+
+                    if (!prefersReducedMotion) {
+                        heroKineticGroup.rotation.y = t * 0.22 + s * 0.8 + mouseState.currentX * 0.35;
+                        heroKineticGroup.rotation.x = 0.2 + Math.sin(t * 0.5) * 0.1 + mouseState.currentY * 0.25;
+                    }
+
+                    // Expand satellites during Scene 02 transition
+                    heroKineticGroup.children.forEach((child) => {
+                        if (child.userData && child.userData.isSatellite) {
+                            child.position.copy(child.userData.basePos).multiplyScalar(expandFactor);
+                            child.rotation.x = t * 0.6;
+                            child.rotation.y = t * 0.4;
+                        }
+                    });
+                }
+            }
+
+            // 2. Scene 03 — ScriptMarket Folio Installation (Peak at Stage 3.0)
+            if (scriptFolioGroup) {
+                const dist3 = Math.abs(s - 3.0);
+                const weight3 = Math.max(0, 1.0 - dist3 * 1.15);
+                scriptFolioGroup.visible = weight3 > 0.01;
+
+                if (scriptFolioGroup.visible) {
+                    const targetX = isMobile ? 0 : -2.25;
+                    const targetY = (s - 3.0) * -2.2;
+                    scriptFolioGroup.position.set(targetX, targetY, 0.4);
+                    scriptFolioGroup.scale.setScalar(Math.max(0.001, weight3));
+
+                    scriptFolioGroup.rotation.y = 0.22 + mouseState.currentX * 0.28 + (s - 3.0) * 0.45;
+                    scriptFolioGroup.rotation.x = mouseState.currentY * 0.18;
+
+                    // Fan out screenplay sheets smoothly
+                    scriptFolioGroup.children.forEach((child) => {
+                        if (child.userData && typeof child.userData.sheetIndex === 'number') {
+                            const idx = child.userData.sheetIndex;
+                            const fanSpread = 0.85 + weight3 * 0.45;
+                            child.position.copy(child.userData.baseOffset).multiplyScalar(fanSpread);
+                            child.position.y += Math.sin(t * 1.4 + idx * 0.7) * 0.04;
+                            child.rotation.set(
+                                child.userData.baseRot.x,
+                                child.userData.baseRot.y + Math.sin(t * 0.8 + idx) * 0.04,
+                                child.userData.baseRot.z
+                            );
+                        }
+                    });
+                }
+            }
+
+            // 3. Scene 04 — APEX VELOCITY 3D Race Circuit & Prototype Vehicle (Peak at Stage 4.0)
+            if (apexCircuitGroup && apexCurve && apexVehicleMesh) {
+                const dist4 = Math.abs(s - 4.0);
+                const weight4 = Math.max(0, 1.0 - dist4 * 1.1);
+                apexCircuitGroup.visible = weight4 > 0.01;
+
+                if (apexCircuitGroup.visible) {
+                    apexCircuitGroup.position.set(0, (s - 4.0) * -2.0, -0.5);
+                    apexCircuitGroup.scale.setScalar(Math.max(0.001, weight4));
+
+                    // Dynamic tilt & rotation of the banked circuit as the visitor scrolls
+                    apexCircuitGroup.rotation.x = 0.42 + mouseState.currentY * 0.15;
+                    apexCircuitGroup.rotation.y = (s - 4.0) * 1.35 + mouseState.currentX * 0.3;
+
+                    // Drive the prototype vehicle around the spline circuit (scroll + continuous velocity)
+                    const lapParam = ((t * (prefersReducedMotion ? 0.03 : 0.14)) + Math.max(0, s - 3.2) * 0.35) % 1;
+                    const carPos = apexCurve.getPointAt(lapParam);
+                    const lookParam = (lapParam + 0.025) % 1;
+                    const carTarget = apexCurve.getPointAt(lookParam);
+
+                    apexVehicleMesh.position.copy(carPos);
+                    tempVec3.copy(carTarget).add(apexCircuitGroup.position);
+                    apexVehicleMesh.lookAt(carTarget);
+                    // Subtle drift counter-steer angle on corners
+                    apexVehicleMesh.rotation.y += 0.18 * Math.sin(lapParam * Math.PI * 4);
+                }
+            }
+
+            // 4. Scene 05 — Trade-wide Distributed Node Topology (Peak at Stage 5.0)
+            if (tradeNetworkGroup) {
+                const dist5 = Math.abs(s - 5.0);
+                const weight5 = Math.max(0, 1.0 - dist5 * 1.15);
+                tradeNetworkGroup.visible = weight5 > 0.01;
+
+                if (tradeNetworkGroup.visible) {
+                    const targetX = isMobile ? 0 : 2.35;
+                    tradeNetworkGroup.position.set(targetX, (s - 5.0) * -2.2, 0.2);
+                    tradeNetworkGroup.scale.setScalar(Math.max(0.001, weight5));
+
+                    tradeNetworkGroup.rotation.y = t * 0.18 + (s - 5.0) * 0.6 + mouseState.currentX * 0.3;
+                    tradeNetworkGroup.rotation.x = 0.15 + mouseState.currentY * 0.2;
+
+                    // Animate data packets along distributed service paths
+                    tradePackets.forEach((pkt) => {
+                        const alpha = ((t * pkt.userData.speed) + pkt.userData.offset) % 1;
+                        pkt.position.lerpVectors(pkt.userData.start, pkt.userData.end, alpha);
+                    });
+                }
+            }
+
+            // 5. Scene 06 — Architecture Stack (Peak at Stage 6.0)
+            if (archStackGroup) {
+                const dist6 = Math.abs(s - 6.0);
+                const weight6 = Math.max(0, 1.0 - dist6 * 1.15);
+                archStackGroup.visible = weight6 > 0.01;
+
+                if (archStackGroup.visible) {
+                    const targetX = isMobile ? 0 : -2.35;
+                    archStackGroup.position.set(targetX, (s - 6.0) * -2.0, -0.2);
+                    archStackGroup.scale.setScalar(Math.max(0.001, weight6));
+
+                    archStackGroup.rotation.y = 0.55 + t * 0.12 + mouseState.currentX * 0.25;
+                    archStackGroup.rotation.x = 0.24 + mouseState.currentY * 0.15;
+
+                    archSlabs.forEach((slab, idx) => {
+                        const isHovered = hoveredArchTier === idx;
+                        const targetScale = isHovered ? 1.14 : 1.0;
+                        slab.scale.x += (targetScale - slab.scale.x) * 0.12;
+                        slab.scale.z += (targetScale - slab.scale.z) * 0.12;
+                    });
+                }
+            }
+
+            // Camera Dolly & Subtle Mouse Blend
+            const camTargetZ = s >= 3.5 && s <= 4.5 ? 8.2 : 9.4;
+            camera.position.z += (camTargetZ - camera.position.z) * 0.05;
+            camera.position.x += (mouseState.currentX * 0.45 - camera.position.x) * 0.05;
+            camera.position.y += (mouseState.currentY * 0.3 - camera.position.y) * 0.05;
+
+            camera.lookAt(currentCamLookAt);
+            renderer.render(scene, camera);
+        }
+
+        function onPointerMove(e) {
+            mouseState.targetX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseState.targetY = -(e.clientY / window.innerHeight) * 2 + 1;
+        }
+
+        function onViewportResize() {
+            if (!camera || !renderer) return;
+            const isMobile = window.innerWidth < 768;
+            camera.fov = isMobile ? 48 : 38;
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Initialize on Window Load
+        window.onload = function () {
+            initPersistent3DPortfolio();
+            requestAnimationFrame(animatePortfolio);
+        };
+    </script>
+</body>
+</html>
